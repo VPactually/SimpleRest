@@ -3,6 +3,7 @@ package com.vpactually.dao;
 import com.vpactually.entities.Label;
 import com.vpactually.entities.Task;
 import com.vpactually.util.ConnectionManager;
+import com.vpactually.util.DependencyContainer;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -118,8 +119,8 @@ public class LabelDAO implements DAO<Integer, Label> {
             preparedStatement.setObject(1, id);
             var resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-//                var task = TASK_DAO.buildTask(resultSet);
-//                tasks.add(task);
+                var task = DependencyContainer.getInstance().getDependency(TaskDAO.class).buildTask(resultSet);
+                tasks.add(task);
             }
         } catch (SQLException e) {
             e.fillInStackTrace();
