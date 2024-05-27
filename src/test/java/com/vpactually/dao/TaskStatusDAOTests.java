@@ -40,6 +40,11 @@ public class TaskStatusDAOTests {
     }
 
     @Test
+    void testFindBySlug() {
+        assertThat(taskStatusDAO.findBySlug("draft").get().getSlug()).isEqualTo(EXISTING_STATUS.getSlug());
+    }
+
+    @Test
     void testSave() {
         var savedTaskStatus = taskStatusDAO.save(ANOTHER_STATUS);
 

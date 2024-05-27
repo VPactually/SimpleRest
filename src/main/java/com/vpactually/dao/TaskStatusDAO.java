@@ -26,47 +26,46 @@ public class TaskStatusDAO implements DAO<Integer, TaskStatus> {
 
     @Override
     public List<TaskStatus> findAll() {
+        List<TaskStatus> taskStatuses = new ArrayList<>();
         try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(FIND_ALL_SQL)) {
             var resultSet = preparedStatement.executeQuery();
-            List<TaskStatus> taskStatuses = new ArrayList<>();
             while (resultSet.next()) {
                 var taskStatus = buildTaskStatus(resultSet);
                 taskStatuses.add(taskStatus);
             }
-            return taskStatuses;
         } catch (SQLException e) {
             e.fillInStackTrace();
-            return List.of();
         }
+        return taskStatuses;
     }
 
     @Override
     public Optional<TaskStatus> findById(Integer id) {
+        TaskStatus taskStatus = null;
         try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(FIND_BY_ID_SQL)) {
             preparedStatement.setObject(1, id);
             var resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return Optional.of(buildTaskStatus(resultSet));
+                taskStatus = buildTaskStatus(resultSet);
             }
-            return Optional.empty();
         } catch (SQLException e) {
             e.fillInStackTrace();
-            return Optional.empty();
         }
+        return Optional.ofNullable(taskStatus);
     }
 
     public Optional<TaskStatus> findBySlug(String slug) {
+        TaskStatus taskStatus = null;
         try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(FIND_BY_SLUG_SQL)) {
             preparedStatement.setObject(1, slug);
             var resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return Optional.of(buildTaskStatus(resultSet));
+                taskStatus = buildTaskStatus(resultSet);
             }
-            return Optional.empty();
         } catch (SQLException e) {
             e.fillInStackTrace();
-            return Optional.empty();
         }
+        return Optional.ofNullable(taskStatus);
     }
 
     @Override
@@ -80,11 +79,10 @@ public class TaskStatusDAO implements DAO<Integer, TaskStatus> {
             if (generatedKeys.next()) {
                 entity.setId(generatedKeys.getInt(1));
             }
-            return entity;
         } catch (SQLException e) {
             e.fillInStackTrace();
-            return null;
         }
+        return entity;
     }
 
     @Override
@@ -94,11 +92,10 @@ public class TaskStatusDAO implements DAO<Integer, TaskStatus> {
             preparedStatement.setObject(2, entity.getSlug());
             preparedStatement.setObject(3, entity.getId());
             preparedStatement.executeUpdate();
-            return entity;
         } catch (SQLException e) {
             e.fillInStackTrace();
-            return null;
         }
+        return entity;
     }
 
     @Override
@@ -108,7 +105,6 @@ public class TaskStatusDAO implements DAO<Integer, TaskStatus> {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.fillInStackTrace();
-            return false;
         }
         return true;
     }
