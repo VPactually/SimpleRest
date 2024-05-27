@@ -2,6 +2,7 @@ package com.vpactually.dao;
 
 import com.vpactually.entities.Task;
 import com.vpactually.util.ContainerUtil;
+import com.vpactually.util.DependencyContainer;
 import com.vpactually.util.FetchType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,7 +18,7 @@ import static com.vpactually.util.DataUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserDAOTests {
-    private static final UserDAO userDAO = UserDAO.getInstance();
+    private static final UserDAO userDAO = DependencyContainer.getInstance().getDependency(UserDAO.class);
     private static JdbcDatabaseContainer<?> postgresqlContainer;
 
     @BeforeAll
@@ -50,9 +51,9 @@ public class UserDAOTests {
     void testSave() {
         var savedUser = ANOTHER_USER;
         var newTask1 = new Task(2, "Task 1", "Description 1", LocalDate.now(),
-                EXISTING_STATUS, ADMIN, Set.of(EXISTING_LABEL_1));
+                EXISTING_STATUS_1, ADMIN, Set.of(EXISTING_LABEL_1));
         var newTask2 = new Task(3, "Task 2", "Description 2", LocalDate.now(),
-                EXISTING_STATUS, ADMIN, Set.of(EXISTING_LABEL_1));
+                EXISTING_STATUS_1, ADMIN, Set.of(EXISTING_LABEL_1));
 
         savedUser.setFetchType(FetchType.EAGER);
         savedUser.getTasks().add(newTask1);

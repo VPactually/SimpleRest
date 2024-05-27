@@ -1,6 +1,7 @@
 package com.vpactually.dao;
 
 import com.vpactually.util.ContainerUtil;
+import com.vpactually.util.DependencyContainer;
 import com.vpactually.util.FetchType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class TaskDAOTests {
 
-    private static final TaskDAO TASK_DAO = TaskDAO.getInstance();
+    private static final TaskDAO TASK_DAO = DependencyContainer.getInstance().getDependency(TaskDAO.class);
 
     private static JdbcDatabaseContainer<?> postgresqlContainer;
 

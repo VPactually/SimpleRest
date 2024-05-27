@@ -4,15 +4,15 @@ import com.vpactually.dao.TaskDAO;
 import com.vpactually.dto.tasks.TaskCreateUpdateDTO;
 import com.vpactually.dto.tasks.TaskDTO;
 import com.vpactually.mappers.TaskMapper;
-import org.mapstruct.factory.Mappers;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 public class TaskService {
 
-    private static final TaskService INSTANCE = new TaskService();
-    private static final TaskDAO TASK_DAO = TaskDAO.getInstance();
-    private static final TaskMapper mapper = Mappers.getMapper(TaskMapper.class);
+    private final TaskDAO TASK_DAO;
+    private final TaskMapper mapper;
 
     public List<TaskDTO> getAll() {
         return TASK_DAO.findAll().stream().map(mapper::map).toList();

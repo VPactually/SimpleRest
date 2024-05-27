@@ -15,7 +15,9 @@ public class DataUtil {
             "admin", LocalDate.now());
     public static User ANOTHER_USER = new User(null, "user", "user@gmail.com",
             "user", LocalDate.now());
-    public static TaskStatus EXISTING_STATUS = new TaskStatus(1, "Draft", "draft",
+    public static TaskStatus EXISTING_STATUS_1 = new TaskStatus(1, "Draft", "draft",
+            LocalDate.now());
+    public static TaskStatus EXISTING_STATUS_2 = new TaskStatus(4, "ToBeFixed", "to_be_fixed",
             LocalDate.now());
     public static TaskStatus ANOTHER_STATUS = new TaskStatus(null, "NewStatus", "new_status",
             LocalDate.now());

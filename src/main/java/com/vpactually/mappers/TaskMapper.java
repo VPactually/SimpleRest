@@ -8,6 +8,7 @@ import com.vpactually.entities.Label;
 import com.vpactually.entities.Task;
 import com.vpactually.entities.TaskStatus;
 import com.vpactually.entities.User;
+import com.vpactually.util.DependencyContainer;
 import org.mapstruct.*;
 
 import java.util.Set;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 )
 public abstract class TaskMapper {
 
-    private static final TaskStatusDAO taskStatusDAO = TaskStatusDAO.getInstance();
+    private static final TaskStatusDAO taskStatusDAO = DependencyContainer.getInstance().getDependency(TaskStatusDAO.class);
 
     public abstract Task map(TaskCreateUpdateDTO dto);
 

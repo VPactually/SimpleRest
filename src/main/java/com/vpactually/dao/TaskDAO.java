@@ -2,6 +2,7 @@ package com.vpactually.dao;
 
 import com.vpactually.entities.Task;
 import com.vpactually.util.ConnectionManager;
+import com.vpactually.util.DependencyContainer;
 import com.vpactually.util.FetchType;
 
 import java.sql.ResultSet;
@@ -10,11 +11,6 @@ import java.sql.Statement;
 import java.util.*;
 
 public class TaskDAO implements DAO<Integer, Task> {
-
-    private static final TaskDAO INSTANCE = new TaskDAO();
-    private static final TaskStatusDAO TASK_STATUS_DAO = TaskStatusDAO.getInstance();
-    private static final UserDAO USER_DAO = UserDAO.getInstance();
-    private static final LabelDAO LABEL_DAO = LabelDAO.getInstance();
 
     private static final String FIND_ALL_SQL = "SELECT * FROM tasks";
     private static final String FIND_BY_ID_SQL = "SELECT * FROM tasks WHERE id = ?";
@@ -51,7 +47,9 @@ public class TaskDAO implements DAO<Integer, Task> {
             var resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 var task = buildTask(resultSet);
-                task.setAssignee(USER_DAO.findById(resultSet.getInt("user_id")).orElseThrow());
+                task.setAssignee(DependencyContainer.getInstance().getDependency(UserDAO.class)
+                        .findById(resultSet.getInt("user_id"))
+                        .orElseThrow());
                 task.getAssignee().setFetchType(FetchType.LAZY);
                 tasks.add(task);
             }
@@ -69,7 +67,9 @@ public class TaskDAO implements DAO<Integer, Task> {
             var resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 task = buildTask(resultSet);
-                task.setAssignee(USER_DAO.findById(resultSet.getInt("user_id")).orElseThrow());
+                task.setAssignee(DependencyContainer.getInstance().getDependency(UserDAO.class)
+                        .findById(resultSet.getInt("user_id"))
+                        .orElseThrow());
                 task.getAssignee().setFetchType(FetchType.LAZY);
             }
         } catch (SQLException e) {
@@ -139,18 +139,16 @@ public class TaskDAO implements DAO<Integer, Task> {
             task.setTitle(resultSet.getString("title"));
             task.setDescription(resultSet.getString("description"));
             task.setCreatedAt(resultSet.getDate("created_at").toLocalDate());
-            task.setTaskStatus(TASK_STATUS_DAO.findById(resultSet.getInt("status_id")).orElseThrow());
-            task.setLabels(LABEL_DAO.findLabelsByTaskId(resultSet.getInt("id")));
+            task.setTaskStatus(DependencyContainer.getInstance().getDependency(TaskStatusDAO.class)
+                    .findById(resultSet.getInt("status_id"))
+                    .orElseThrow());
+            task.setLabels(DependencyContainer.getInstance().getDependency(LabelDAO.class)
+                    .findLabelsByTaskId(resultSet.getInt("id")));
         } catch (SQLException e) {
             e.fillInStackTrace();
         }
         return task;
     }
-
-    public static TaskDAO getInstance() {
-        return INSTANCE;
-    }
-
 
     public void saveTaskLabels(Task task) {
         var taskLabels = task.getLabels();

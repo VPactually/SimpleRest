@@ -1,6 +1,7 @@
 package com.vpactually.entities;
 
 import com.vpactually.dao.TaskDAO;
+import com.vpactually.util.DependencyContainer;
 import com.vpactually.util.FetchType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,7 +37,7 @@ public class User implements BaseEntity{
 
     public Set<Task> getTasks() {
         if (fetchType.equals(FetchType.EAGER)) {
-            tasks = TaskDAO.getInstance().findUserTasksByUserId(id);
+            tasks = DependencyContainer.getInstance().getDependency(TaskDAO.class).findUserTasksByUserId(id);
         }
         return tasks;
     }

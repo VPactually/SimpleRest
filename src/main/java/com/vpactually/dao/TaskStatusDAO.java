@@ -11,18 +11,12 @@ import java.util.List;
 import java.util.Optional;
 
 public class TaskStatusDAO implements DAO<Integer, TaskStatus> {
-
-    private static final TaskStatusDAO INSTANCE = new TaskStatusDAO();
-
     private static final String FIND_ALL_SQL = "SELECT * FROM task_statuses";
     private static final String FIND_BY_ID_SQL = "SELECT * FROM task_statuses WHERE id = ?";
     private static final String FIND_BY_SLUG_SQL = "SELECT * FROM task_statuses WHERE slug = ?";
     private static final String SAVE_SQL = "INSERT INTO task_statuses (name, slug, created_at) VALUES (?, ?, ?)";
     private static final String UPDATE_SQL = "UPDATE task_statuses SET name = ?, slug = ? WHERE id = ?";
     private static final String DELETE_SQL = "DELETE FROM task_statuses WHERE id = ?";
-
-    private TaskStatusDAO() {
-    }
 
     @Override
     public List<TaskStatus> findAll() {
@@ -116,9 +110,5 @@ public class TaskStatusDAO implements DAO<Integer, TaskStatus> {
         taskStatus.setSlug(resultSet.getString("slug"));
         taskStatus.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime().toLocalDate());
         return taskStatus;
-    }
-
-    public static TaskStatusDAO getInstance() {
-        return INSTANCE;
     }
 }

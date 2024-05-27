@@ -4,25 +4,16 @@ import com.vpactually.dao.LabelDAO;
 import com.vpactually.dto.labels.LabelCreateUpdateDTO;
 import com.vpactually.dto.labels.LabelDTO;
 import com.vpactually.mappers.LabelMapper;
-import org.mapstruct.factory.Mappers;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 public class LabelService {
 
-    private static LabelService INSTANCE = new LabelService();
-
-    private static LabelDAO LABEL_DAO = LabelDAO.getInstance();
-    private static LabelMapper LABEL_MAPPER = Mappers.getMapper(LabelMapper.class);
-
-    public static LabelService getInstance() {
-        return INSTANCE;
-    }
-
-    private LabelService() {
-
-    }
+    private final LabelDAO LABEL_DAO;
+    private final LabelMapper LABEL_MAPPER;
 
     public List<LabelDTO> findAll() {
         return LABEL_DAO.findAll().stream().map(LABEL_MAPPER::map).toList();

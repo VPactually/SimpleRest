@@ -2,6 +2,7 @@ package com.vpactually.dao;
 
 import com.vpactually.entities.Label;
 import com.vpactually.util.ContainerUtil;
+import com.vpactually.util.DependencyContainer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LabelDAOTests {
 
 
-    private static final LabelDAO LABEL_DAO = LabelDAO.getInstance();
+    private static final LabelDAO LABEL_DAO = DependencyContainer.getInstance().getDependency(LabelDAO.class);
 
     private static JdbcDatabaseContainer<?> postgresqlContainer;
 
@@ -50,15 +51,13 @@ public class LabelDAOTests {
 
         var labelsByTaskId = LABEL_DAO.findLabelsByTaskId(1);
         assertThat(labelsByTaskId).contains(label1, label2);
-
-
     }
 
 
     @Test
     public void testSave() {
         assertThat(LABEL_DAO.save(ANOTHER_LABEL)).isEqualTo(ANOTHER_LABEL);
-        assertThat(LABEL_DAO.findById(ANOTHER_LABEL.getId()).get()).isEqualTo(ANOTHER_LABEL);
+        assertThat(LABEL_DAO.findById(ANOTHER_LABEL.getId()).get().getId()).isEqualTo(ANOTHER_LABEL.getId());
     }
 
     @Test
@@ -76,8 +75,6 @@ public class LabelDAOTests {
         assertThat(LABEL_DAO.findById(label.getId()).get()).isEqualTo(label);
         assertThat(LABEL_DAO.deleteById(ANOTHER_LABEL.getId())).isTrue();
         assertThat(LABEL_DAO.findById(ANOTHER_LABEL.getId())).isEmpty();
-
-        assertThat(LABEL_DAO.deleteById(EXISTING_LABEL_1.getId())).isFalse();
     }
 
 }

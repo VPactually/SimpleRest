@@ -2,6 +2,7 @@ package com.vpactually.dao;
 
 import com.vpactually.entities.User;
 import com.vpactually.util.ConnectionManager;
+import com.vpactually.util.DependencyContainer;
 import com.vpactually.util.FetchType;
 
 import java.sql.ResultSet;
@@ -14,18 +15,11 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserDAO implements DAO<Integer, User> {
-
-    private static final UserDAO INSTANCE = new UserDAO();
-    private static final TaskDAO TASK_DAO = TaskDAO.getInstance();
-
     private static final String FIND_ALL_SQL = "SELECT * FROM users";
     private static final String FIND_BY_ID_SQL = "SELECT * FROM users WHERE id = ?";
     private static final String SAVE_SQL = "INSERT INTO users (name, email, password, created_at) VALUES (?, ?, ?, ?)";
     private static final String UPDATE_SQL = "UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?";
     private static final String DELETE_SQL = "DELETE FROM users WHERE id = ?";
-
-    private UserDAO() {
-    }
 
     @Override
     public List<User> findAll() {
@@ -67,7 +61,8 @@ public class UserDAO implements DAO<Integer, User> {
             preparedStatement.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
             preparedStatement.executeUpdate();
             user.setFetchType(FetchType.EAGER);
-            TASK_DAO.saveUserTasks(user.getTasks(), user.getId());
+            DependencyContainer.getInstance().getDependency(TaskDAO.class)
+                    .saveUserTasks(user.getTasks(), user.getId());
             var generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
                 user.setId(generatedKeys.getInt(1));
@@ -86,7 +81,8 @@ public class UserDAO implements DAO<Integer, User> {
             preparedStatement.setObject(3, user.getPassword());
             preparedStatement.setObject(4, user.getId());
             preparedStatement.executeUpdate();
-            TASK_DAO.saveUserTasks(user.getTasks(), user.getId());
+            DependencyContainer.getInstance().getDependency(TaskDAO.class)
+                    .saveUserTasks(user.getTasks(), user.getId());
             user.setFetchType(FetchType.LAZY);
         } catch (SQLException e) {
             e.fillInStackTrace();
@@ -104,10 +100,6 @@ public class UserDAO implements DAO<Integer, User> {
             e.fillInStackTrace();
             return false;
         }
-    }
-
-    public static UserDAO getInstance() {
-        return INSTANCE;
     }
 
     private static User buildUser(ResultSet resultSet) throws SQLException {

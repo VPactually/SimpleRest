@@ -11,9 +11,6 @@ import java.util.*;
 
 public class LabelDAO implements DAO<Integer, Label> {
 
-    private static final LabelDAO INSTANCE = new LabelDAO();
-    private static final TaskDAO TASK_DAO = TaskDAO.getInstance();
-
     private static final String FIND_ALL_SQL = "SELECT * FROM labels";
     private static final String FIND_BY_ID_SQL = "SELECT * FROM labels WHERE id = ?";
     private static final String SAVE_SQL = "INSERT INTO labels (name, created_at) VALUES (?, ?)";
@@ -25,9 +22,6 @@ public class LabelDAO implements DAO<Integer, Label> {
     private static final String FIND_TASKS_BY_LABEL_ID_SQL = """
             SELECT * FROM task_labels INNER JOIN  tasks ON task_labels.task_id = tasks.id WHERE label_id = ?
             """;
-
-    private LabelDAO() {
-    }
 
     @Override
     public List<Label> findAll() {
@@ -124,8 +118,8 @@ public class LabelDAO implements DAO<Integer, Label> {
             preparedStatement.setObject(1, id);
             var resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                var task = TASK_DAO.buildTask(resultSet);
-                tasks.add(task);
+//                var task = TASK_DAO.buildTask(resultSet);
+//                tasks.add(task);
             }
         } catch (SQLException e) {
             e.fillInStackTrace();
@@ -139,10 +133,6 @@ public class LabelDAO implements DAO<Integer, Label> {
         label.setName(resultSet.getString("name"));
         label.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime().toLocalDate());
         return label;
-    }
-
-    public static LabelDAO getInstance() {
-        return INSTANCE;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.vpactually.entities;
 
 import com.vpactually.dao.LabelDAO;
+import com.vpactually.util.DependencyContainer;
 import com.vpactually.util.FetchType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,7 +34,7 @@ public class Label implements BaseEntity{
 
     public Set<Task> getTasks() {
         if (fetchType.equals(FetchType.EAGER)) {
-            tasks = LabelDAO.getInstance().findTasksByLabelId(id);
+            tasks = DependencyContainer.getInstance().getDependency(LabelDAO.class).findTasksByLabelId(id);
         }
         return tasks;
     }

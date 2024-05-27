@@ -4,23 +4,16 @@ import com.vpactually.dao.TaskStatusDAO;
 import com.vpactually.dto.taskStatuses.TaskStatusCreateUpdateDTO;
 import com.vpactually.dto.taskStatuses.TaskStatusDTO;
 import com.vpactually.mappers.TaskStatusMapper;
-import org.mapstruct.factory.Mappers;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 public class TaskStatusService {
-    private static final TaskStatusService INSTANCE = new TaskStatusService();
 
-    private static final TaskStatusDAO taskStatusDAO = TaskStatusDAO.getInstance();
-    private static final TaskStatusMapper taskStatusMapper = Mappers.getMapper(TaskStatusMapper.class);
-
-    private TaskStatusService() {
-    }
-
-    public static TaskStatusService getInstance() {
-        return INSTANCE;
-    }
+    private final TaskStatusDAO taskStatusDAO ;
+    private final TaskStatusMapper taskStatusMapper;
 
     public List<TaskStatusDTO> findAll() {
         return taskStatusDAO.findAll().stream().map(taskStatusMapper::map).toList();

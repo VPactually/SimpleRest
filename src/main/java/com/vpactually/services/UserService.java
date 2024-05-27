@@ -4,24 +4,16 @@ import com.vpactually.dao.UserDAO;
 import com.vpactually.dto.users.UserCreateUpdateDTO;
 import com.vpactually.dto.users.UserDTO;
 import com.vpactually.mappers.UserMapper;
-import org.mapstruct.factory.Mappers;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 public class UserService {
 
-    private static final UserService INSTANCE = new UserService();
-
-    private static final UserDAO userDAO = UserDAO.getInstance();
-    private static final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
-
-    private UserService() {
-    }
-
-    public static UserService getInstance() {
-        return INSTANCE;
-    }
+    private final UserDAO userDAO;
+    private final UserMapper userMapper;
 
     public List<UserDTO> findAll() {
         return userDAO.findAll().stream().map(userMapper::map).toList();
