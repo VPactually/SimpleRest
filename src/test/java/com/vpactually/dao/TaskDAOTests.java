@@ -3,7 +3,7 @@ package com.vpactually.dao;
 import com.vpactually.util.ContainerUtil;
 import com.vpactually.util.FetchType;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 
@@ -18,8 +18,8 @@ public class TaskDAOTests {
 
     private static JdbcDatabaseContainer<?> postgresqlContainer;
 
-    @BeforeEach
-    public void startContainer() throws SQLException {
+    @BeforeAll
+    public static void startContainer() throws SQLException {
         postgresqlContainer = ContainerUtil.run(postgresqlContainer);
     }
 

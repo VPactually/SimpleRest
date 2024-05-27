@@ -18,7 +18,7 @@ public class Label implements BaseEntity{
     private String name;
     private LocalDate createdAt;
     private Set<Task> tasks = new HashSet<>();
-    private FetchType fetchType = FetchType.LAZY;
+    private transient FetchType fetchType = FetchType.LAZY;
 
     public Label(Integer id) {
         this.id = id;

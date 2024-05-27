@@ -20,7 +20,7 @@ public class User implements BaseEntity{
     private String password;
     private LocalDate createdAt;
     private Set<Task> tasks = new HashSet<>();
-    private FetchType fetchType = FetchType.LAZY;
+    private transient FetchType fetchType = FetchType.LAZY;
 
     public User(Integer id) {
         this.id = id;

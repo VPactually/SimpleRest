@@ -11,16 +11,17 @@ import java.util.Optional;
 
 public class LabelService {
 
-    private static final LabelService INSTANCE = new LabelService();
+    private static LabelService INSTANCE = new LabelService();
 
-    private static final LabelDAO LABEL_DAO = LabelDAO.getInstance();
-    private static final LabelMapper LABEL_MAPPER = Mappers.getMapper(LabelMapper.class);
-
-    private LabelService() {
-    }
+    private static LabelDAO LABEL_DAO = LabelDAO.getInstance();
+    private static LabelMapper LABEL_MAPPER = Mappers.getMapper(LabelMapper.class);
 
     public static LabelService getInstance() {
         return INSTANCE;
+    }
+
+    private LabelService() {
+
     }
 
     public List<LabelDTO> findAll() {
@@ -34,7 +35,7 @@ public class LabelService {
     public LabelDTO update(LabelCreateUpdateDTO labelDTO, Integer id) {
         var label = LABEL_DAO.findById(id).orElseThrow();
         LABEL_MAPPER.update(labelDTO, label);
-        LABEL_DAO.save(label);
+        LABEL_DAO.update(label);
         return LABEL_MAPPER.map(label);
     }
 
@@ -47,4 +48,6 @@ public class LabelService {
     public void deleteById(Integer id) {
         LABEL_DAO.deleteById(id);
     }
+
+
 }

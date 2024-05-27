@@ -22,7 +22,7 @@ public class Task implements BaseEntity {
     private TaskStatus taskStatus;
     private User assignee;
     private Set<Label> labels = new HashSet<>();
-    private FetchType fetchType = FetchType.LAZY;
+    private transient FetchType fetchType = FetchType.LAZY;
 
     public Task(Integer id, String title, String description, LocalDate createdAt, TaskStatus taskStatus, User assignee, Set<Label> labels) {
         this.id = id;

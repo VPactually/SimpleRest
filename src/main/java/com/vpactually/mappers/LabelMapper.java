@@ -5,6 +5,8 @@ import com.vpactually.dto.labels.LabelDTO;
 import com.vpactually.entities.Label;
 import org.mapstruct.*;
 
+import java.util.List;
+
 @Mapper(
         uses = {JsonNullableMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
@@ -18,6 +20,8 @@ public abstract class LabelMapper {
     public abstract Label map(LabelCreateUpdateDTO dto);
 
     public abstract LabelDTO map(Label model);
+
+    public abstract List<LabelDTO> map(List<Label> models);
 
     public abstract void update(LabelCreateUpdateDTO dto, @MappingTarget Label model);
 

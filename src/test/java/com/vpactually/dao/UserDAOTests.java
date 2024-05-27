@@ -4,7 +4,7 @@ import com.vpactually.entities.Task;
 import com.vpactually.util.ContainerUtil;
 import com.vpactually.util.FetchType;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 
@@ -20,8 +20,8 @@ public class UserDAOTests {
     private static final UserDAO userDAO = UserDAO.getInstance();
     private static JdbcDatabaseContainer<?> postgresqlContainer;
 
-    @BeforeEach
-    public void startContainer() throws SQLException {
+    @BeforeAll
+    public static void startContainer() throws SQLException {
         postgresqlContainer = ContainerUtil.run(postgresqlContainer);
     }
 
@@ -43,7 +43,7 @@ public class UserDAOTests {
 
         assertThat(userDAO.findById(1).get().getName()).isEqualTo(user.getName());
         assertThat(userDAO.findById(1).get().getEmail()).isEqualTo(user.getEmail());
-        assertThat(userDAO.findById(2)).isEqualTo(Optional.empty());
+        assertThat(userDAO.findById(666)).isEqualTo(Optional.empty());
     }
 
     @Test

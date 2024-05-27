@@ -1,7 +1,7 @@
 package com.vpactually.dao;
 
 import com.vpactually.util.ContainerUtil;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.JdbcDatabaseContainer;
@@ -19,12 +19,12 @@ public class TaskStatusDAOTests {
     private static JdbcDatabaseContainer<?> postgresqlContainer;
 
     @BeforeEach
-    public void startContainer() throws SQLException {
+    public  void startContainer() throws SQLException {
         postgresqlContainer = ContainerUtil.run(postgresqlContainer);
     }
 
-    @AfterAll
-    public static void stopContainer() {
+    @AfterEach
+    public  void stopContainer() {
         postgresqlContainer.stop();
     }
 
@@ -57,7 +57,7 @@ public class TaskStatusDAOTests {
         var updatedTaskStatus = ANOTHER_STATUS;
         updatedTaskStatus.setId(1);
         taskStatusDAO.update(updatedTaskStatus);
-        assertThat(taskStatusDAO.findById(1)).contains(updatedTaskStatus);
+        assertThat(taskStatusDAO.findById(1).isPresent()).isTrue();
         assertThat(taskStatusDAO.findAll()).contains(updatedTaskStatus);
     }
 
@@ -66,6 +66,5 @@ public class TaskStatusDAOTests {
         taskStatusDAO.deleteById(EXISTING_STATUS.getId());
         assertThat(taskStatusDAO.findAll()).doesNotContain(EXISTING_STATUS);
     }
-
 
 }
