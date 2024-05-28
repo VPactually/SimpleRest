@@ -24,10 +24,10 @@ public class TaskStatusService {
     }
 
     public TaskStatusDTO update(TaskStatusCreateUpdateDTO taskStatusUpdateDTO, Integer id) {
-        var user = taskStatusDAO.findById(id).orElseThrow();
-        taskStatusMapper.update(taskStatusUpdateDTO, user);
-        taskStatusDAO.save(user);
-        return taskStatusMapper.map(user);
+        var status = taskStatusDAO.findById(id).orElseThrow();
+        taskStatusMapper.update(taskStatusUpdateDTO, status);
+        taskStatusDAO.update(status);
+        return taskStatusMapper.map(status);
     }
 
     public TaskStatusDTO save(TaskStatusCreateUpdateDTO userCreateDTO) {
