@@ -49,8 +49,14 @@ CREATE TABLE task_labels
 
 CREATE TABLE user_tasks
 (
-    user_id    INTEGER NOT NULL REFERENCES users (id),
-    task_id    INTEGER NOT NULL REFERENCES tasks (id)
+    user_id INTEGER NOT NULL REFERENCES users (id),
+    task_id INTEGER NOT NULL REFERENCES tasks (id)
+);
+
+CREATE TABLE task_task_statuses
+(
+    task_id        INTEGER NOT NULL REFERENCES tasks (id),
+    task_status_id INTEGER NOT NULL REFERENCES task_statuses (id)
 );
 
 INSERT INTO users (name, email, password, created_at)
@@ -71,7 +77,11 @@ INSERT INTO tasks (title, description, status_id, user_id, created_at)
 VALUES ('Task 1', 'Description 1', 5, 1, now());
 
 INSERT INTO task_labels (task_id, label_id)
-VALUES (1, 1), (1, 2);
+VALUES (1, 1),
+       (1, 2);
 
 INSERT INTO user_tasks (user_id, task_id)
 VALUES (1, 1);
+
+INSERT INTO task_task_statuses (task_id, task_status_id)
+VALUES (1, 5);
