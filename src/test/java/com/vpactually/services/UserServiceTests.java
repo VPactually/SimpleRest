@@ -13,16 +13,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.openapitools.jackson.nullable.JsonNullable;
-import org.testcontainers.containers.JdbcDatabaseContainer;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+import static com.vpactually.util.DataUtil.ADMIN;
+import static com.vpactually.util.DataUtil.ANOTHER_USER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static com.vpactually.util.DataUtil.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTests {
@@ -36,16 +36,14 @@ public class UserServiceTests {
     @InjectMocks
     private UserService userService;
 
-    private static JdbcDatabaseContainer<?> postgresqlContainer;
-
     @BeforeAll
     public static void startContainer() throws SQLException {
-        postgresqlContainer = ContainerUtil.run(postgresqlContainer);
+        ContainerUtil.run();
     }
 
     @AfterAll
     public static void stopContainer() {
-        postgresqlContainer.stop();
+        ContainerUtil.stop();
     }
 
     @Test
@@ -79,7 +77,7 @@ public class UserServiceTests {
     public void testSave() {
         var userDto = new UserDTO(2, ANOTHER_USER.getName(), ANOTHER_USER.getEmail(), ANOTHER_USER.getCreatedAt());
         var userCreateUpdateDto = new UserCreateUpdateDTO(JsonNullable.of(ANOTHER_USER.getName()),
-               JsonNullable.of(ANOTHER_USER.getEmail()), JsonNullable.of( ANOTHER_USER.getPassword()));
+                JsonNullable.of(ANOTHER_USER.getEmail()), JsonNullable.of(ANOTHER_USER.getPassword()));
         var savedUser = ANOTHER_USER;
         savedUser.setId(2);
 

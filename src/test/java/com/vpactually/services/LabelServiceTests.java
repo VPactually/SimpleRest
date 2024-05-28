@@ -14,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.openapitools.jackson.nullable.JsonNullable;
-import org.testcontainers.containers.JdbcDatabaseContainer;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -37,16 +36,14 @@ public class LabelServiceTests {
     @InjectMocks
     private LabelService labelService;
 
-    private static JdbcDatabaseContainer<?> postgresqlContainer;
-
     @BeforeAll
     public static void startContainer() throws SQLException {
-        postgresqlContainer = ContainerUtil.run(postgresqlContainer);
+        ContainerUtil.run();
     }
 
     @AfterAll
     public static void stopContainer() {
-        postgresqlContainer.stop();
+        ContainerUtil.stop();
     }
 
     @Test
