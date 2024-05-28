@@ -2,11 +2,12 @@ package com.vpactually.dao;
 
 import com.vpactually.entities.Label;
 import com.vpactually.util.ContainerUtil;
-import com.vpactually.util.DependencyContainer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.JdbcDatabaseContainer;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -16,21 +17,20 @@ import static com.vpactually.util.DataUtil.ANOTHER_LABEL;
 import static com.vpactually.util.DataUtil.EXISTING_LABEL_1;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ExtendWith(MockitoExtension.class)
 public class LabelDAOTests {
 
-
-    private static final LabelDAO LABEL_DAO = DependencyContainer.getInstance().getDependency(LabelDAO.class);
-
-    private static JdbcDatabaseContainer<?> postgresqlContainer;
+    @InjectMocks
+    private static LabelDAO LABEL_DAO;
 
     @BeforeAll
     public static void startContainer() throws SQLException {
-        postgresqlContainer = ContainerUtil.run(postgresqlContainer);
+        ContainerUtil.run();
     }
 
     @AfterAll
     public static void stopContainer() {
-        postgresqlContainer.stop();
+        ContainerUtil.stop();
     }
 
     @Test

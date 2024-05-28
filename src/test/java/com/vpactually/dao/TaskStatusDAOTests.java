@@ -2,31 +2,32 @@ package com.vpactually.dao;
 
 import com.vpactually.entities.TaskStatus;
 import com.vpactually.util.ContainerUtil;
-import com.vpactually.util.DependencyContainer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.JdbcDatabaseContainer;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.SQLException;
 
 import static com.vpactually.util.DataUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ExtendWith(MockitoExtension.class)
 public class TaskStatusDAOTests {
 
-    private static final TaskStatusDAO taskStatusDAO = DependencyContainer.getInstance().getDependency(TaskStatusDAO.class);
-
-    private static JdbcDatabaseContainer<?> postgresqlContainer;
+    @InjectMocks
+    private static TaskStatusDAO taskStatusDAO;
 
     @BeforeAll
-    public static  void startContainer() throws SQLException {
-        postgresqlContainer = ContainerUtil.run(postgresqlContainer);
+    public static void startContainer() throws SQLException {
+        ContainerUtil.run();
     }
 
     @AfterAll
-    public static   void stopContainer() {
-        postgresqlContainer.stop();
+    public static void stopContainer() {
+        ContainerUtil.stop();
     }
 
     @Test

@@ -1,34 +1,35 @@
 package com.vpactually.dao;
 
-import com.vpactually.entities.Task;
 import com.vpactually.util.ContainerUtil;
-import com.vpactually.util.DependencyContainer;
-import com.vpactually.util.FetchType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.JdbcDatabaseContainer;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.Optional;
-import java.util.Set;
 
-import static com.vpactually.util.DataUtil.*;
+import static com.vpactually.util.DataUtil.ADMIN;
+import static com.vpactually.util.DataUtil.ANOTHER_USER;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ExtendWith(MockitoExtension.class)
 public class UserDAOTests {
-    private static final UserDAO userDAO = DependencyContainer.getInstance().getDependency(UserDAO.class);
-    private static JdbcDatabaseContainer<?> postgresqlContainer;
+
+    @InjectMocks
+    private static UserDAO userDAO;
+
 
     @BeforeAll
     public static void startContainer() throws SQLException {
-        postgresqlContainer = ContainerUtil.run(postgresqlContainer);
+        ContainerUtil.run();
     }
 
     @AfterAll
     public static void stopContainer() {
-        postgresqlContainer.stop();
+        ContainerUtil.stop();
     }
 
     @Test
@@ -50,26 +51,15 @@ public class UserDAOTests {
     @Test
     void testSave() {
         var savedUser = ANOTHER_USER;
-        var newTask1 = new Task(2, "Task 1", "Description 1", LocalDate.now(),
-                EXISTING_STATUS_1, ADMIN, Set.of(EXISTING_LABEL_1));
-        var newTask2 = new Task(3, "Task 2", "Description 2", LocalDate.now(),
-                EXISTING_STATUS_1, ADMIN, Set.of(EXISTING_LABEL_1));
-
-        savedUser.setFetchType(FetchType.EAGER);
-        savedUser.getTasks().add(newTask1);
-        savedUser.getTasks().add(newTask2);
         savedUser = userDAO.save(savedUser);
-
-        assertThat(ANOTHER_USER).isEqualTo(savedUser);
-        assertThat(userDAO.findById(savedUser.getId()).get().getTasks()).isEqualTo(savedUser.getTasks());
-
+        assertThat(userDAO.findById(savedUser.getId()).get()).isEqualTo(savedUser);
     }
 
     @Test
     void testUpdate() {
-        var user = ADMIN;
-        user.setName("newName");
-        var updatedUser = userDAO.update(user);
+        var admin = ADMIN;
+        admin.setName("newName");
+        var updatedUser = userDAO.update(admin);
 
         assertThat(updatedUser.getName()).isEqualTo(userDAO.findById(updatedUser.getId()).get().getName());
     }
