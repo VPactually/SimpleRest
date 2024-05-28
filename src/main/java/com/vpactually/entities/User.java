@@ -3,8 +3,8 @@ package com.vpactually.entities;
 import com.vpactually.dao.TaskDAO;
 import com.vpactually.util.DependencyContainer;
 import com.vpactually.util.FetchType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
@@ -12,8 +12,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class User implements BaseEntity{
     private Integer id;
     private String name;
@@ -41,13 +41,4 @@ public class User implements BaseEntity{
         }
         return tasks;
     }
-
-    public void addTask(Task task) {
-        getTasks().add(task);
-    }
-
-    public void removeTask(Task task) {
-        getTasks().remove(task);
-    }
-
 }

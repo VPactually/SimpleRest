@@ -3,8 +3,8 @@ package com.vpactually.entities;
 import com.vpactually.dao.LabelDAO;
 import com.vpactually.util.DependencyContainer;
 import com.vpactually.util.FetchType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class Label implements BaseEntity{
     private Integer id;
     private String name;
@@ -37,13 +37,5 @@ public class Label implements BaseEntity{
             tasks = DependencyContainer.getInstance().getDependency(LabelDAO.class).findTasksByLabelId(id);
         }
         return tasks;
-    }
-
-    public void addTask(Task task) {
-        getTasks().add(task);
-    }
-
-    public void removeTask(Task task) {
-        getTasks().remove(task);
     }
 }

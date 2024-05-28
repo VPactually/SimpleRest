@@ -4,8 +4,8 @@ import com.vpactually.dao.LabelDAO;
 import com.vpactually.dao.UserDAO;
 import com.vpactually.util.DependencyContainer;
 import com.vpactually.util.FetchType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class Task implements BaseEntity {
     private Integer id;
     private String title;
@@ -48,13 +48,5 @@ public class Task implements BaseEntity {
                     .findById(assignee.getId()).get();
         }
         return assignee;
-    }
-
-    public void addLabel(Label label) {
-        getLabels().add(label);
-    }
-
-    public void removeLabel(Label label) {
-        getLabels().remove(label);
     }
 }

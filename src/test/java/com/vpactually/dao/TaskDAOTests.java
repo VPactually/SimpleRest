@@ -78,7 +78,7 @@ public class TaskDAOTests {
 
         TASK_DAO.save(newTask);
 
-        user.addTask(newTask);
+        user.getTasks().add(newTask);
 
         TASK_DAO.saveUserTasks(tasks, user.getId());
         newTask.setFetchType(FetchType.LAZY);

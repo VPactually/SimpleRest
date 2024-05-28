@@ -7,8 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class TaskStatus implements BaseEntity {
     private Integer id;
     private String name;
@@ -28,13 +28,5 @@ public class TaskStatus implements BaseEntity {
             tasks = new HashSet<>();
         }
         return tasks;
-    }
-
-    public void addTask(Task task) {
-        getTasks().add(task);
-    }
-
-    public void removeTask(Task task) {
-        getTasks().remove(task);
     }
 }
