@@ -9,21 +9,27 @@ import java.sql.SQLException;
 
 public class ContainerUtil {
 
+    public static JdbcDatabaseContainer<?> postgresqlContainer;
+
     private ContainerUtil() {
     }
 
-    public static JdbcDatabaseContainer<?> run(JdbcDatabaseContainer<?> container) throws SQLException {
-        container = new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest"))
+    public static JdbcDatabaseContainer<?> run() throws SQLException {
+        postgresqlContainer = new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest"))
                 .withDatabaseName("testdb")
                 .withUsername("testuser")
                 .withPassword("testpass")
                 .withInitScript("schema.sql");
-        container.start();
+        postgresqlContainer.start();
         ConnectionManager.setConnection(DriverManager.getConnection(
-                container.getJdbcUrl(),
-                container.getUsername(),
-                container.getPassword())
+                postgresqlContainer.getJdbcUrl(),
+                postgresqlContainer.getUsername(),
+                postgresqlContainer.getPassword())
         );
-        return container;
+        return postgresqlContainer;
+    }
+
+    public static void stop() {
+        postgresqlContainer.stop();
     }
 }
