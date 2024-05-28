@@ -1,5 +1,6 @@
 drop table if exists task_labels;
 drop table if exists user_tasks;
+drop table if exists task_task_statuses;
 drop table if exists labels;
 drop table if exists tasks;
 drop table if exists users;
