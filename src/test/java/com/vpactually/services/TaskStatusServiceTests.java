@@ -109,7 +109,6 @@ public class TaskStatusServiceTests {
                 updatedStatus.getId(), updatedStatus.getName(), updatedStatus.getSlug());
 
         when(taskStatusDAO.findById(EXISTING_STATUS_1.getId())).thenReturn(Optional.of(EXISTING_STATUS_1));
-
         when(taskStatusDAO.update(updatedStatus)).thenReturn(updatedStatus);
         when(taskStatusMapper.map(updatedStatus)).thenReturn(updatedDDTO);
 

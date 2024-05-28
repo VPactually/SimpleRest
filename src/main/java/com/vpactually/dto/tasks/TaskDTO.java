@@ -1,13 +1,15 @@
 package com.vpactually.dto.tasks;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class TaskDTO {
     private Integer id;
     private String title;
