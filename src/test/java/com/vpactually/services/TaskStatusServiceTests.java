@@ -103,22 +103,18 @@ public class TaskStatusServiceTests {
 
     @Test
     public void testUpdate() {
-        // Set up the test data
         var taskStatusUpdateDTO = new TaskStatusCreateUpdateDTO(JsonNullable.of("newName"), null);
         var updatedStatus = EXISTING_STATUS_1;
         var updatedDDTO = new TaskStatusDTO(
                 updatedStatus.getId(), updatedStatus.getName(), updatedStatus.getSlug());
 
-        // Set up the mock behavior
         when(taskStatusDAO.findById(EXISTING_STATUS_1.getId())).thenReturn(Optional.of(EXISTING_STATUS_1));
 
         when(taskStatusDAO.update(updatedStatus)).thenReturn(updatedStatus);
         when(taskStatusMapper.map(updatedStatus)).thenReturn(updatedDDTO);
 
-        // Call the method under test
-        TaskStatusDTO result = taskStatusService.update(taskStatusUpdateDTO, 1);
+        TaskStatusDTO result = taskStatusService.update(taskStatusUpdateDTO, EXISTING_STATUS_1.getId());
 
-        // Verify the results
         assertThat(result.toString()).isEqualTo(updatedDDTO.toString());
         verify(taskStatusDAO).findById(1);
         verify(taskStatusDAO).update(updatedStatus);

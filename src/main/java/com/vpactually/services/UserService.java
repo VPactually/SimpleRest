@@ -26,7 +26,7 @@ public class UserService {
     public UserDTO update(UserCreateUpdateDTO userUpdateDTO, Integer id) {
         var user = userDAO.findById(id).orElseThrow();
         userMapper.update(userUpdateDTO, user);
-        userDAO.save(user);
+        userDAO.update(user);
         return userMapper.map(user);
     }
 
@@ -36,7 +36,7 @@ public class UserService {
         return userMapper.map(user);
     }
 
-    public void delete(Integer id) {
+    public void deleteById(Integer id) {
         userDAO.deleteById(id);
     }
 }
