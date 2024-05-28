@@ -16,12 +16,10 @@ public class LabelDAO implements DAO<Integer, Label> {
     private static final String SAVE_SQL = "INSERT INTO labels (name, created_at) VALUES (?, ?)";
     private static final String UPDATE_SQL = "UPDATE labels SET name = ? WHERE id = ?";
     private static final String DELETE_SQL = "DELETE FROM labels WHERE id = ?";
-    private static final String FIND_LABELS_BY_TASK_ID_SQL = """
-            SELECT * FROM task_labels INNER JOIN  labels ON task_labels.label_id = labels.id WHERE task_id = ?
-            """;
     private static final String FIND_TASKS_BY_LABEL_ID_SQL = """
-            SELECT * FROM task_labels INNER JOIN  tasks ON task_labels.task_id = tasks.id WHERE label_id = ?
+            SELECT * FROM tasks INNER JOIN  task_labels ON task_labels.task_id = tasks.id WHERE label_id = ?
             """;
+
 
     @Override
     public List<Label> findAll() {
@@ -97,22 +95,7 @@ public class LabelDAO implements DAO<Integer, Label> {
         return true;
     }
 
-    public Set<Label> findLabelsByTaskId(Integer id) {
-        Set<Label> labels = new HashSet<>();
-        try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(FIND_LABELS_BY_TASK_ID_SQL)) {
-            preparedStatement.setObject(1, id);
-            var resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                var label = buildLabel(resultSet);
-                labels.add(label);
-            }
-        } catch (SQLException e) {
-            e.fillInStackTrace();
-        }
-        return labels;
-    }
-
-    public Set<Task> findTasksByLabelId(Integer id) {
+    public static Set<Task> findTasksByLabelId(Integer id) {
         Set<Task> tasks = new HashSet<>();
         try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(FIND_TASKS_BY_LABEL_ID_SQL)) {
             preparedStatement.setObject(1, id);
@@ -127,7 +110,7 @@ public class LabelDAO implements DAO<Integer, Label> {
         return tasks;
     }
 
-    private Label buildLabel(ResultSet resultSet) throws SQLException {
+    public static Label buildLabel(ResultSet resultSet) throws SQLException {
         var label = new Label();
         label.setId(resultSet.getInt("id"));
         label.setName(resultSet.getString("name"));

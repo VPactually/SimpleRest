@@ -1,7 +1,12 @@
 package com.vpactually.entities;
 
-import lombok.*;
+import com.vpactually.dao.TaskDAO;
+import com.vpactually.util.ConnectionManager;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +19,8 @@ public class TaskStatus implements BaseEntity {
     private String name;
     private String slug;
     private LocalDate createdAt;
-    private Set<Task> tasks;
+    private Set<Task> tasks = new HashSet<>();
+    private static final String FIND_TASKS_BY_STATUS_ID_SQL = "SELECT * FROM tasks WHERE status_id = ?";
 
     public TaskStatus(Integer id, String name, String slug, LocalDate createdAt) {
         this.id = id;
@@ -23,9 +29,22 @@ public class TaskStatus implements BaseEntity {
         this.createdAt = createdAt;
     }
 
+    public void fetchTasks() {
+        try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(FIND_TASKS_BY_STATUS_ID_SQL)) {
+            preparedStatement.setObject(1, id);
+            var resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                var task = TaskDAO.buildTask(resultSet);
+                tasks.add(task);
+            }
+        } catch (SQLException e) {
+            e.fillInStackTrace();
+        }
+    }
+
     public Set<Task> getTasks() {
-        if (tasks == null) {
-            tasks = new HashSet<>();
+        if (tasks.isEmpty()) {
+            fetchTasks();
         }
         return tasks;
     }

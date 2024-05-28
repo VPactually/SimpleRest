@@ -103,7 +103,7 @@ public class TaskStatusDAO implements DAO<Integer, TaskStatus> {
         return true;
     }
 
-    private TaskStatus buildTaskStatus(ResultSet resultSet) throws SQLException {
+    public static TaskStatus buildTaskStatus(ResultSet resultSet) throws SQLException {
         var taskStatus = new TaskStatus();
         taskStatus.setId(resultSet.getInt("id"));
         taskStatus.setName(resultSet.getString("name"));
