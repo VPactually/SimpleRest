@@ -13,4 +13,5 @@ public class JSONFilter implements Filter {
         servletResponse.setContentType("application/json");
         filterChain.doFilter(servletRequest, servletResponse);
     }
+
 }

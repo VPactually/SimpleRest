@@ -34,7 +34,7 @@ public class Label implements BaseEntity{
 
     public Set<Task> getTasks() {
         if (fetchType.equals(FetchType.EAGER)) {
-            tasks = DependencyContainer.getInstance().getDependency(LabelDAO.class).findTasksByLabelId(id);
+            tasks =  ((LabelDAO) DependencyContainer.getDependency("labelDAO")).findTasksByLabelId(id);
         }
         return tasks;
     }

@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,11 +62,12 @@ public class UserDAO implements DAO<Integer, User> {
             preparedStatement.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
             preparedStatement.executeUpdate();
             user.setFetchType(FetchType.EAGER);
-            DependencyContainer.getInstance().getDependency(TaskDAO.class)
+            ((TaskDAO) DependencyContainer.getDependency("taskDAO"))
                     .saveUserTasks(user.getTasks(), user.getId());
             var generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
                 user.setId(generatedKeys.getInt(1));
+                user.setCreatedAt(LocalDate.now());
             }
         } catch (SQLException e) {
             e.fillInStackTrace();
@@ -81,9 +83,8 @@ public class UserDAO implements DAO<Integer, User> {
             preparedStatement.setObject(3, user.getPassword());
             preparedStatement.setObject(4, user.getId());
             preparedStatement.executeUpdate();
-            DependencyContainer.getInstance().getDependency(TaskDAO.class)
+            ((TaskDAO) DependencyContainer.getDependency("taskDAO"))
                     .saveUserTasks(user.getTasks(), user.getId());
-            user.setFetchType(FetchType.LAZY);
         } catch (SQLException e) {
             e.fillInStackTrace();
         }

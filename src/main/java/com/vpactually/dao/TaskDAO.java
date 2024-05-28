@@ -47,7 +47,7 @@ public class TaskDAO implements DAO<Integer, Task> {
             var resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 var task = buildTask(resultSet);
-                task.setAssignee(DependencyContainer.getInstance().getDependency(UserDAO.class)
+                task.setAssignee( ((UserDAO) DependencyContainer.getDependency("userDAO"))
                         .findById(resultSet.getInt("user_id"))
                         .orElseThrow());
                 task.getAssignee().setFetchType(FetchType.LAZY);
@@ -67,7 +67,7 @@ public class TaskDAO implements DAO<Integer, Task> {
             var resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 task = buildTask(resultSet);
-                task.setAssignee(DependencyContainer.getInstance().getDependency(UserDAO.class)
+                task.setAssignee( ((UserDAO) DependencyContainer.getDependency("userDAO"))
                         .findById(resultSet.getInt("user_id"))
                         .orElseThrow());
                 task.getAssignee().setFetchType(FetchType.LAZY);
@@ -139,10 +139,10 @@ public class TaskDAO implements DAO<Integer, Task> {
             task.setTitle(resultSet.getString("title"));
             task.setDescription(resultSet.getString("description"));
             task.setCreatedAt(resultSet.getDate("created_at").toLocalDate());
-            task.setTaskStatus(DependencyContainer.getInstance().getDependency(TaskStatusDAO.class)
+            task.setTaskStatus(((TaskStatusDAO) DependencyContainer.getDependency("taskStatusDAO"))
                     .findById(resultSet.getInt("status_id"))
                     .orElseThrow());
-            task.setLabels(DependencyContainer.getInstance().getDependency(LabelDAO.class)
+            task.setLabels(((LabelDAO) DependencyContainer.getDependency("labelDAO"))
                     .findLabelsByTaskId(resultSet.getInt("id")));
         } catch (SQLException e) {
             e.fillInStackTrace();

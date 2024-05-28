@@ -15,14 +15,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(
-        uses = {JsonNullableMapper.class,TaskStatusMapper.class, UserMapper.class},
+        uses = {JsonNullableMapper.class, TaskStatusMapper.class, UserMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public abstract class TaskMapper {
 
-    private static final TaskStatusDAO taskStatusDAO = DependencyContainer.getInstance().getDependency(TaskStatusDAO.class);
+    private static final TaskStatusDAO taskStatusDAO = (TaskStatusDAO) DependencyContainer.getDependency("taskStatusDAO");
+
 
     public abstract Task map(TaskCreateUpdateDTO dto);
 

@@ -6,6 +6,7 @@ import com.vpactually.util.FetchType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -21,6 +22,7 @@ public class User implements BaseEntity{
     private String password;
     private LocalDate createdAt;
     private Set<Task> tasks = new HashSet<>();
+    @ToString.Exclude
     private transient FetchType fetchType = FetchType.LAZY;
 
     public User(Integer id) {
@@ -37,7 +39,7 @@ public class User implements BaseEntity{
 
     public Set<Task> getTasks() {
         if (fetchType.equals(FetchType.EAGER)) {
-            tasks = DependencyContainer.getInstance().getDependency(TaskDAO.class).findUserTasksByUserId(id);
+            tasks =  ((TaskDAO) DependencyContainer.getDependency("taskDAO")).findUserTasksByUserId(id);
         }
         return tasks;
     }

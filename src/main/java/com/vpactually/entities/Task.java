@@ -37,15 +37,15 @@ public class Task implements BaseEntity {
 
     public Set<Label> getLabels() {
         if (fetchType.equals(FetchType.EAGER)) {
-            labels = DependencyContainer.getInstance().getDependency(LabelDAO.class).findLabelsByTaskId(id);
+            labels =  ((LabelDAO) DependencyContainer.getDependency("labelDAO")).findLabelsByTaskId(id);
         }
         return labels;
     }
 
     public User getAssignee() {
         if (fetchType.equals(FetchType.EAGER)) {
-            assignee = DependencyContainer.getInstance().getDependency(UserDAO.class)
-                    .findById(assignee.getId()).get();
+            assignee =  ((UserDAO) DependencyContainer.getDependency("userDAO"))
+                    .findById(assignee.getId()).orElseThrow();
         }
         return assignee;
     }
