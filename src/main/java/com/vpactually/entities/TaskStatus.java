@@ -29,6 +29,10 @@ public class TaskStatus implements BaseEntity {
         this.createdAt = createdAt;
     }
 
+    public TaskStatus(Integer id) {
+        this.id = id;
+    }
+
     public void fetchTasks() {
         try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(FIND_TASKS_BY_STATUS_ID_SQL)) {
             preparedStatement.setObject(1, id);

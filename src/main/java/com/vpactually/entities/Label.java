@@ -32,7 +32,6 @@ public class Label implements BaseEntity{
         this.tasks = tasks;
     }
 
-
     public void fetchTasks() {
         try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(FIND_TASKS_BY_LABEL_ID_SQL)) {
             preparedStatement.setObject(1, id);

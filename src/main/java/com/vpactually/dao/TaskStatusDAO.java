@@ -6,6 +6,7 @@ import com.vpactually.util.ConnectionManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -67,7 +68,7 @@ public class TaskStatusDAO implements DAO<Integer, TaskStatus> {
         try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setObject(1, entity.getName());
             preparedStatement.setObject(2, entity.getSlug());
-            preparedStatement.setObject(3, entity.getCreatedAt());
+            preparedStatement.setObject(3, LocalDate.now());
             preparedStatement.executeUpdate();
             var generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {

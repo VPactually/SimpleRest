@@ -7,6 +7,7 @@ import com.vpactually.util.ConnectionManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.*;
 
 public class LabelDAO implements DAO<Integer, Label> {
@@ -55,7 +56,7 @@ public class LabelDAO implements DAO<Integer, Label> {
     public Label save(Label label) {
         try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setObject(1, label.getName());
-            preparedStatement.setObject(2, label.getCreatedAt());
+            preparedStatement.setObject(2, LocalDate.now());
             preparedStatement.executeUpdate();
             var resultSet = preparedStatement.getGeneratedKeys();
             while (resultSet.next()) {
@@ -101,8 +102,8 @@ public class LabelDAO implements DAO<Integer, Label> {
             preparedStatement.setObject(1, id);
             var resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-//                var task = buildTask(resultSet);
-//                tasks.add(task);
+                var task = TaskDAO.buildTask(resultSet);
+                tasks.add(task);
             }
         } catch (SQLException e) {
             e.fillInStackTrace();
@@ -114,7 +115,7 @@ public class LabelDAO implements DAO<Integer, Label> {
         var label = new Label();
         label.setId(resultSet.getInt("id"));
         label.setName(resultSet.getString("name"));
-        label.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime().toLocalDate());
+        label.setCreatedAt(resultSet.getDate("created_at").toLocalDate());
         return label;
     }
 
