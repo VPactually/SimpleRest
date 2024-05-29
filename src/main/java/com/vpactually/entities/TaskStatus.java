@@ -29,8 +29,9 @@ public class TaskStatus implements BaseEntity {
         this.createdAt = createdAt;
     }
 
-    public TaskStatus(Integer id) {
+    public TaskStatus(Integer id, Set<Task> tasks) {
         this.id = id;
+        this.tasks = tasks;
     }
 
     public void fetchTasks() {

@@ -87,7 +87,7 @@ public class TaskServiceTests {
     @Test
     public void testSave() {
         var taskCreateUpdateDTO = new TaskCreateUpdateDTO(JsonNullable.of(ANOTHER_TASK.getTitle()),
-                JsonNullable.of(ANOTHER_TASK.getDescription()), JsonNullable.of(ANOTHER_TASK.getTaskStatus().getName()),
+                JsonNullable.of(ANOTHER_TASK.getDescription()), JsonNullable.of(ANOTHER_TASK.getTaskStatus().getId()),
                 JsonNullable.of(ANOTHER_TASK.getAssignee().getId()),
                 JsonNullable.of(ANOTHER_TASK.getLabels().stream().map(Label::getId).collect(Collectors.toSet())));
         var task = ANOTHER_TASK;

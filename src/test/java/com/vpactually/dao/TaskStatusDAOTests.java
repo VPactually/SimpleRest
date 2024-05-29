@@ -43,7 +43,7 @@ public class TaskStatusDAOTests {
 
     @Test
     void testFindBySlug() {
-        assertThat(taskStatusDAO.findBySlug("draft").get().getSlug()).isEqualTo(EXISTING_STATUS_1.getSlug());
+        assertThat(taskStatusDAO.findById(1).get().getId()).isEqualTo(EXISTING_STATUS_1.getId());
     }
 
     @Test

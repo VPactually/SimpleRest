@@ -7,6 +7,7 @@ import com.vpactually.mappers.TaskMapper;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class TaskService {
@@ -18,14 +19,16 @@ public class TaskService {
         return TASK_DAO.findAll().stream().map(mapper::map).toList();
     }
 
+    public Optional<TaskDTO> findById(Integer id) {
+        var task = TASK_DAO.findById(id).orElseThrow();
+        var mappedTask = mapper.map(task);
+        return Optional.of(mappedTask);
+    }
+
     public TaskDTO save(TaskCreateUpdateDTO taskCreateDTO) {
         var task = mapper.map(taskCreateDTO);
         TASK_DAO.save(task);
         return mapper.map(task);
-    }
-
-    public TaskDTO findById(Integer id) {
-        return mapper.map(TASK_DAO.findById(id).orElseThrow());
     }
 
     public TaskDTO update(TaskCreateUpdateDTO taskUpdateDTO, Integer id) {

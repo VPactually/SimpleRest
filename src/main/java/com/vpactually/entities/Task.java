@@ -93,6 +93,8 @@ public class Task implements BaseEntity {
 
     public User getAssignee() {
         if (assignee == null) {
+            assignee = new User();
+        } else  {
             fetchAssignee();
         }
         return assignee;
@@ -100,6 +102,8 @@ public class Task implements BaseEntity {
 
     public TaskStatus getTaskStatus() {
         if (taskStatus == null) {
+            taskStatus = new TaskStatus();
+        } else  {
             fetchTaskStatus();
         }
         return taskStatus;

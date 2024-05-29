@@ -22,8 +22,9 @@ public class User implements BaseEntity{
 
     private static final String FIND_USER_TASKS_BY_USER_ID_SQL = "SELECT * FROM tasks WHERE user_id = ?";
 
-    public User(Integer id) {
+    public User(Integer id, Set<Task> tasks) {
         this.id = id;
+        this.tasks = tasks;
     }
 
     public User(Integer id, String name, String email, String password, LocalDate createdAt) {

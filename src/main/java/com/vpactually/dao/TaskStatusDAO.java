@@ -14,7 +14,6 @@ import java.util.Optional;
 public class TaskStatusDAO implements DAO<Integer, TaskStatus> {
     private static final String FIND_ALL_SQL = "SELECT * FROM task_statuses";
     private static final String FIND_BY_ID_SQL = "SELECT * FROM task_statuses WHERE id = ?";
-    private static final String FIND_BY_SLUG_SQL = "SELECT * FROM task_statuses WHERE slug = ?";
     private static final String SAVE_SQL = "INSERT INTO task_statuses (name, slug, created_at) VALUES (?, ?, ?)";
     private static final String UPDATE_SQL = "UPDATE task_statuses SET name = ?, slug = ? WHERE id = ?";
     private static final String DELETE_SQL = "DELETE FROM task_statuses WHERE id = ?";
@@ -35,7 +34,7 @@ public class TaskStatusDAO implements DAO<Integer, TaskStatus> {
     }
 
     @Override
-    public Optional<TaskStatus> findById(Integer id) {
+    public  Optional<TaskStatus> findById(Integer id) {
         TaskStatus taskStatus = null;
         try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(FIND_BY_ID_SQL)) {
             preparedStatement.setObject(1, id);
@@ -49,19 +48,7 @@ public class TaskStatusDAO implements DAO<Integer, TaskStatus> {
         return Optional.ofNullable(taskStatus);
     }
 
-    public Optional<TaskStatus> findBySlug(String slug) {
-        TaskStatus taskStatus = null;
-        try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(FIND_BY_SLUG_SQL)) {
-            preparedStatement.setObject(1, slug);
-            var resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                taskStatus = buildTaskStatus(resultSet);
-            }
-        } catch (SQLException e) {
-            e.fillInStackTrace();
-        }
-        return Optional.ofNullable(taskStatus);
-    }
+
 
     @Override
     public TaskStatus save(TaskStatus entity) {
@@ -110,6 +97,15 @@ public class TaskStatusDAO implements DAO<Integer, TaskStatus> {
         taskStatus.setName(resultSet.getString("name"));
         taskStatus.setSlug(resultSet.getString("slug"));
         taskStatus.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime().toLocalDate());
+        return taskStatus;
+    }
+
+    public static TaskStatus buildTaskStatusByJoinTables(ResultSet resultSet) throws SQLException {
+        var taskStatus = new TaskStatus();
+        taskStatus.setId(resultSet.getInt(7));
+        taskStatus.setName(resultSet.getString(8));
+        taskStatus.setSlug(resultSet.getString(9));
+        taskStatus.setCreatedAt(resultSet.getTimestamp(10).toLocalDateTime().toLocalDate());
         return taskStatus;
     }
 }

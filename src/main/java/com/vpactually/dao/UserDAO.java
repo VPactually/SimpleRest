@@ -118,6 +118,21 @@ public class UserDAO implements DAO<Integer, User> {
         return user;
     }
 
+    public static User buildUserByJoinTables(ResultSet resultSet) throws SQLException {
+        var user = new User();
+        var id = resultSet.getInt(11);
+        user.setId(id);
+        var name = resultSet.getString(12);
+        user.setName(name);
+        var email = resultSet.getString(13);
+        user.setEmail(email);
+        var password = resultSet.getString(14);
+        user.setPassword(password);
+        var date = resultSet.getDate(15).toLocalDate();
+        user.setCreatedAt(date);
+        return user;
+    }
+
     public void saveUserTasks(Set<Task> tasks, Integer userId) {
         try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(DELETE_USER_TASKS_SQL)) {
             preparedStatement.setObject(1, userId);
