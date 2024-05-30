@@ -45,6 +45,7 @@ jacocoTestReport {
         xml.required.set(true)
     }
 }
+
 test {
     useJUnitPlatform()
 }

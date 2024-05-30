@@ -49,17 +49,6 @@ public class DependencyContainer {
         beanMap.put("taskStatusService", taskStatusService);
         beanMap.put("labelService", labelService);
 
-        beanMap.put("userDAO", userDAO);
-        beanMap.put("taskDAO", taskDAO);
-        beanMap.put("taskStatusDAO", taskStatusDAO);
-        beanMap.put("labelDAO", labelDAO);
-
-        beanMap.put("userMapper", userMapper);
-        beanMap.put("taskMapper", taskMapper);
-        beanMap.put("taskStatusMapper", taskStatusMapper);
-        beanMap.put("labelMapper", labelMapper);
-
-
         context.setAttribute("objectMapper", om);
         context.setAttribute("userService", userService);
         context.setAttribute("taskService", taskService);
