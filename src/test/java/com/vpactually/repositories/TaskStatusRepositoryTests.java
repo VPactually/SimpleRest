@@ -11,14 +11,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.SQLException;
 
-import static com.vpactually.util.DataUtil.*;
+import static com.vpactually.util.DataUtil.ANOTHER_STATUS;
+import static com.vpactually.util.DataUtil.EXISTING_STATUS_1;
+import static com.vpactually.util.DataUtil.EXISTING_STATUS_2;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 public class TaskStatusRepositoryTests {
 
     @InjectMocks
-    private static TaskStatusRepository taskStatusDAO;
+    private static TaskStatusRepository taskStatusRepository;
 
     @BeforeAll
     public static void startContainer() throws SQLException {
@@ -32,40 +34,41 @@ public class TaskStatusRepositoryTests {
 
     @Test
     void testFindAll() {
-        assertThat(taskStatusDAO.findAll()).contains(EXISTING_STATUS_1);
-        assertThat(taskStatusDAO.findAll().toString()).contains("draft", "to_review", "to_be_fixed", "to_publish", "published");
+        assertThat(taskStatusRepository.findAll()).contains(EXISTING_STATUS_1);
+        assertThat(taskStatusRepository.findAll().toString())
+                .contains("draft", "to_review", "to_be_fixed", "to_publish", "published");
     }
 
     @Test
     void testFindById() {
-        assertThat(taskStatusDAO.findById(1)).contains(EXISTING_STATUS_1);
+        assertThat(taskStatusRepository.findById(1)).contains(EXISTING_STATUS_1);
     }
 
     @Test
     void testFindBySlug() {
-        assertThat(taskStatusDAO.findById(1).get().getId()).isEqualTo(EXISTING_STATUS_1.getId());
+        assertThat(taskStatusRepository.findById(1).get().getId()).isEqualTo(EXISTING_STATUS_1.getId());
     }
 
     @Test
     void testSave() {
-        var savedTaskStatus = taskStatusDAO.save(ANOTHER_STATUS);
+        var savedTaskStatus = taskStatusRepository.save(ANOTHER_STATUS);
 
         assertThat(ANOTHER_STATUS).isEqualTo(savedTaskStatus);
-        assertThat(taskStatusDAO.findAll()).contains(savedTaskStatus);
+        assertThat(taskStatusRepository.findAll()).contains(savedTaskStatus);
     }
 
     @Test
     void testUpdate() {
         var updatedTaskStatus = EXISTING_STATUS_2;
         updatedTaskStatus.setSlug("newSlug");
-        TaskStatus update = taskStatusDAO.update(updatedTaskStatus);
-        assertThat(taskStatusDAO.findAll()).contains(update);
+        TaskStatus update = taskStatusRepository.update(updatedTaskStatus);
+        assertThat(taskStatusRepository.findAll()).contains(update);
     }
 
     @Test
     void testDelete() {
-        taskStatusDAO.deleteById(EXISTING_STATUS_1.getId());
-        assertThat(taskStatusDAO.findAll()).doesNotContain(EXISTING_STATUS_1);
+        taskStatusRepository.deleteById(EXISTING_STATUS_1.getId());
+        assertThat(taskStatusRepository.findAll()).doesNotContain(EXISTING_STATUS_1);
     }
 
 }

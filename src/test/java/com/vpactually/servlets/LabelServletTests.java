@@ -105,7 +105,7 @@ public class LabelServletTests {
     @Test
     public void testDoPut() throws IOException, ServletException {
         var labelDTO = new LabelDTO(1, "test");
-        when(service.update(any(LabelCreateUpdateDTO.class),anyInt())).thenReturn(labelDTO);
+        when(service.update(any(LabelCreateUpdateDTO.class), anyInt())).thenReturn(labelDTO);
         when(resp.getWriter()).thenReturn(writer);
         when(req.getRequestURI()).thenReturn(URI + "/1");
 

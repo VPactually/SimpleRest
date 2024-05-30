@@ -112,7 +112,7 @@ public class TaskServletTests {
     public void testDoPut() throws IOException, ServletException {
         var taskDTO = new TaskDTO(1, "test", "test", "test", 1,
                 LocalDate.now().toString(), Set.of(1));
-        when(service.update(any(TaskUpdateDTO.class),anyInt())).thenReturn(taskDTO);
+        when(service.update(any(TaskUpdateDTO.class), anyInt())).thenReturn(taskDTO);
         when(resp.getWriter()).thenReturn(writer);
         when(req.getRequestURI()).thenReturn(URI + "/1");
 

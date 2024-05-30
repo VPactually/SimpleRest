@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TaskRepositoryTests {
 
     @InjectMocks
-    private static TaskRepository TASK_DAO ;
+    private static TaskRepository taskRepository;
 
     @BeforeAll
     public static void startContainer() throws SQLException {
@@ -33,18 +33,18 @@ public class TaskRepositoryTests {
     @Test
     void testFindAll() {
         var task = EXISTING_TASK;
-        assertThat(TASK_DAO.findAll().toString()).contains(task.getTitle());
-        assertThat(TASK_DAO.findAll().toString()).contains(task.getDescription());
+        assertThat(taskRepository.findAll().toString()).contains(task.getTitle());
+        assertThat(taskRepository.findAll().toString()).contains(task.getDescription());
     }
 
     @Test
     void testFindById() {
-        assertThat(TASK_DAO.findById(1).get().getId()).isEqualTo(EXISTING_TASK.getId());
+        assertThat(taskRepository.findById(1).get().getId()).isEqualTo(EXISTING_TASK.getId());
     }
 
     @Test
     void testSave() {
-        var savedTask = TASK_DAO.save(ANOTHER_TASK);
+        var savedTask = taskRepository.save(ANOTHER_TASK);
         assertThat(ANOTHER_TASK).isEqualTo(savedTask);
     }
 
@@ -52,8 +52,8 @@ public class TaskRepositoryTests {
     void testUpdate() {
         var updatedTask = EXISTING_TASK;
         updatedTask.setTitle("Updated Title");
-        updatedTask = TASK_DAO.update(updatedTask);
-        var actual = TASK_DAO.findById(updatedTask.getId()).orElseThrow();
+        updatedTask = taskRepository.update(updatedTask);
+        var actual = taskRepository.findById(updatedTask.getId()).orElseThrow();
 
         assertThat(actual).isEqualTo(updatedTask);
     }
@@ -61,9 +61,9 @@ public class TaskRepositoryTests {
     @Test
     void testDelete() {
         var task = ANOTHER_TASK;
-        TASK_DAO.save(task);
-        TASK_DAO.deleteById(task.getId());
-        assertThat(TASK_DAO.findAll()).doesNotContain(task);
+        taskRepository.save(task);
+        taskRepository.deleteById(task.getId());
+        assertThat(taskRepository.findAll()).doesNotContain(task);
     }
 
 //    @Test

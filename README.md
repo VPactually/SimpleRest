@@ -5,3 +5,7 @@
 # Code Coverage
 
 [![Test Coverage](https://api.codeclimate.com/v1/badges/d2bef49d5732734c9fd4/test_coverage)](https://codeclimate.com/github/VPactually/SimpleRest/test_coverage)
+
+# Checkstyle 
+
+[![Maintainability](https://api.codeclimate.com/v1/badges/d2bef49d5732734c9fd4/maintainability)](https://codeclimate.com/github/VPactually/SimpleRest/maintainability)

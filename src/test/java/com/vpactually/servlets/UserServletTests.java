@@ -23,7 +23,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyInt;
+
 
 @ExtendWith(MockitoExtension.class)
 public class UserServletTests {
@@ -103,7 +107,7 @@ public class UserServletTests {
     @Test
     public void testDoPut() throws IOException, ServletException {
         var userDto = new UserDTO(1, "test", "test", LocalDate.now());
-        when(userService.update(any(UserCreateUpdateDTO.class),anyInt())).thenReturn(userDto);
+        when(userService.update(any(UserCreateUpdateDTO.class), anyInt())).thenReturn(userDto);
         when(resp.getWriter()).thenReturn(writer);
         when(req.getRequestURI()).thenReturn(URI + "/1");
 

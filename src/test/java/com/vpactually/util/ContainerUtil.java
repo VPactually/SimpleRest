@@ -7,7 +7,7 @@ import org.testcontainers.utility.DockerImageName;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class ContainerUtil {
+public final class ContainerUtil {
 
     public static JdbcDatabaseContainer<?> postgresqlContainer;
 

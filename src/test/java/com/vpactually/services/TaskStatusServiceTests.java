@@ -18,7 +18,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-import static com.vpactually.util.DataUtil.*;
+import static com.vpactually.util.DataUtil.EXISTING_STATUS_1;
+import static com.vpactually.util.DataUtil.EXISTING_STATUS_2;
+import static com.vpactually.util.DataUtil.ANOTHER_STATUS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -48,8 +50,10 @@ public class TaskStatusServiceTests {
     public void testFindAll() {
         var taskStatuses = List.of(EXISTING_STATUS_1, EXISTING_STATUS_2);
         var taskStatusDTOs = List.of(
-                new TaskStatusDTO(EXISTING_STATUS_1.getId(), EXISTING_STATUS_1.getName(), EXISTING_STATUS_1.getSlug()),
-                new TaskStatusDTO(EXISTING_STATUS_2.getId(), EXISTING_STATUS_2.getName(), EXISTING_STATUS_2.getSlug())
+                new TaskStatusDTO(EXISTING_STATUS_1.getId(), EXISTING_STATUS_1.getName(),
+                        EXISTING_STATUS_1.getSlug()),
+                new TaskStatusDTO(EXISTING_STATUS_2.getId(), EXISTING_STATUS_2.getName(),
+                        EXISTING_STATUS_2.getSlug())
         );
 
         when(taskStatusDAO.findAll()).thenReturn(taskStatuses);
@@ -68,11 +72,13 @@ public class TaskStatusServiceTests {
     public void testFindById() {
         when(taskStatusDAO.findById(EXISTING_STATUS_1.getId())).thenReturn(Optional.of(EXISTING_STATUS_1));
         when(taskStatusMapper.map(EXISTING_STATUS_1)).thenReturn(
-                new TaskStatusDTO(EXISTING_STATUS_1.getId(), EXISTING_STATUS_1.getName(), EXISTING_STATUS_1.getSlug()));
+                new TaskStatusDTO(EXISTING_STATUS_1.getId(), EXISTING_STATUS_1.getName(),
+                        EXISTING_STATUS_1.getSlug()));
 
         var actual = taskStatusService.findById(EXISTING_STATUS_1.getId()).get();
 
-        assertThat(actual.toString()).isEqualTo(new TaskStatusDTO(EXISTING_STATUS_1.getId(), EXISTING_STATUS_1.getName(), EXISTING_STATUS_1.getSlug()).toString());
+        assertThat(actual.toString()).isEqualTo(new TaskStatusDTO(EXISTING_STATUS_1.getId(),
+                EXISTING_STATUS_1.getName(), EXISTING_STATUS_1.getSlug()).toString());
         verify(taskStatusDAO).findById(EXISTING_STATUS_1.getId());
         verify(taskStatusMapper).map(EXISTING_STATUS_1);
     }
@@ -87,11 +93,13 @@ public class TaskStatusServiceTests {
 
         when(taskStatusMapper.map(statusCreateUpdateDTO)).thenReturn(ANOTHER_STATUS);
         when(taskStatusDAO.save(ANOTHER_STATUS)).thenReturn(ANOTHER_STATUS);
-        when(taskStatusMapper.map(ANOTHER_STATUS)).thenReturn(new TaskStatusDTO(ANOTHER_STATUS.getId(), ANOTHER_STATUS.getName(), ANOTHER_STATUS.getSlug()));
+        when(taskStatusMapper.map(ANOTHER_STATUS)).thenReturn(new TaskStatusDTO(ANOTHER_STATUS.getId(),
+                ANOTHER_STATUS.getName(), ANOTHER_STATUS.getSlug()));
 
         var actual = taskStatusService.save(statusCreateUpdateDTO);
 
-        assertThat(actual.toString()).isEqualTo(new TaskStatusDTO(ANOTHER_STATUS.getId(), ANOTHER_STATUS.getName(), ANOTHER_STATUS.getSlug()).toString());
+        assertThat(actual.toString()).isEqualTo(new TaskStatusDTO(ANOTHER_STATUS.getId(),
+                ANOTHER_STATUS.getName(), ANOTHER_STATUS.getSlug()).toString());
         verify(taskStatusDAO).save(ANOTHER_STATUS);
         verify(taskStatusMapper).map(statusCreateUpdateDTO);
         verify(taskStatusMapper).map(ANOTHER_STATUS);

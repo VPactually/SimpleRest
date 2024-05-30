@@ -105,7 +105,7 @@ public class TaskStatusServletTests {
     @Test
     public void testDoPut() throws IOException, ServletException {
         var userDto = new TaskStatusDTO(1, "test", "test");
-        when(service.update(any(TaskStatusCreateUpdateDTO.class),anyInt())).thenReturn(userDto);
+        when(service.update(any(TaskStatusCreateUpdateDTO.class), anyInt())).thenReturn(userDto);
         when(resp.getWriter()).thenReturn(writer);
         when(req.getRequestURI()).thenReturn(URI + "/1");
 

@@ -98,7 +98,8 @@ public class TaskServiceTests {
     @Test
     public void testSave() {
         var taskCreateUpdateDTO = new TaskCreateDTO(JsonNullable.of(ANOTHER_TASK.getTitle()),
-                JsonNullable.of(ANOTHER_TASK.getDescription()), JsonNullable.of(ANOTHER_TASK.getTaskStatus().getId()),
+                JsonNullable.of(ANOTHER_TASK.getDescription()),
+                JsonNullable.of(ANOTHER_TASK.getTaskStatus().getId()),
                 JsonNullable.of(ANOTHER_TASK.getAssignee().getId()),
                 JsonNullable.of(ANOTHER_TASK.getLabels().stream().map(Label::getId).collect(Collectors.toSet())));
         var task = ANOTHER_TASK;
@@ -106,14 +107,16 @@ public class TaskServiceTests {
 
         when(taskMapper.map(taskCreateUpdateDTO)).thenReturn(ANOTHER_TASK);
         when(taskDAO.save(ANOTHER_TASK)).thenReturn(ANOTHER_TASK);
-        when(taskMapper.map(ANOTHER_TASK)).thenReturn(new TaskDTO(ANOTHER_TASK.getId(), ANOTHER_TASK.getTitle(), ANOTHER_TASK.getDescription(),
+        when(taskMapper.map(ANOTHER_TASK)).thenReturn(new TaskDTO(ANOTHER_TASK.getId(),
+                ANOTHER_TASK.getTitle(), ANOTHER_TASK.getDescription(),
                 ANOTHER_TASK.getTaskStatus().getName(), ANOTHER_TASK.getAssignee().getId(),
                 ANOTHER_TASK.getCreatedAt().toString(),
                 ANOTHER_TASK.getLabels().stream().map(Label::getId).collect(Collectors.toSet())));
 
         var actual = taskService.save(taskCreateUpdateDTO);
 
-        assertThat(actual.toString()).isEqualTo(new TaskDTO(ANOTHER_TASK.getId(), ANOTHER_TASK.getTitle(), ANOTHER_TASK.getDescription(),
+        assertThat(actual.toString()).isEqualTo(new TaskDTO(ANOTHER_TASK.getId(),
+                ANOTHER_TASK.getTitle(), ANOTHER_TASK.getDescription(),
                 ANOTHER_TASK.getTaskStatus().getName(), ANOTHER_TASK.getAssignee().getId(),
                 ANOTHER_TASK.getCreatedAt().toString(),
                 ANOTHER_TASK.getLabels().stream().map(Label::getId).collect(Collectors.toSet())).toString());
@@ -124,7 +127,8 @@ public class TaskServiceTests {
 
     @Test
     public void testUpdate() {
-        var taskCreateUpdateDTO = new TaskUpdateDTO(JsonNullable.of("new title"), null, null, null, null);
+        var taskCreateUpdateDTO = new TaskUpdateDTO(JsonNullable.of("new title"),
+                null, null, null, null);
         var task = EXISTING_TASK;
         var updatedTask = new TaskDTO(task.getId(), task.getTitle(), task.getDescription(),
                 task.getTaskStatus().getName(), task.getAssignee().getId(), task.getCreatedAt().toString(),
@@ -138,7 +142,7 @@ public class TaskServiceTests {
         var actual = taskService.update(taskCreateUpdateDTO, task.getId());
 
         assertThat(actual.toString()).isEqualTo(updatedTask.toString());
-        verify(taskDAO).findById(task.getId(),FetchType.LAZY);
+        verify(taskDAO).findById(task.getId(), FetchType.LAZY);
         verify(taskDAO).update(task);
         verify(taskMapper).map(task);
     }

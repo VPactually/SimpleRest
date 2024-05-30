@@ -19,10 +19,15 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-import static com.vpactually.util.DataUtil.*;
+import static com.vpactually.util.DataUtil.EXISTING_LABEL_1;
+import static com.vpactually.util.DataUtil.EXISTING_LABEL_2;
+import static com.vpactually.util.DataUtil.ANOTHER_LABEL;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class LabelServiceTests {
@@ -68,11 +73,13 @@ public class LabelServiceTests {
     @Test
     public void testFindById() {
         when(labelDAO.findById(EXISTING_LABEL_1.getId())).thenReturn(Optional.of(EXISTING_LABEL_1));
-        when(labelMapper.map(EXISTING_LABEL_1)).thenReturn(new LabelDTO(EXISTING_LABEL_1.getId(), EXISTING_LABEL_1.getName()));
+        when(labelMapper.map(EXISTING_LABEL_1)).thenReturn(new LabelDTO(EXISTING_LABEL_1.getId(),
+                EXISTING_LABEL_1.getName()));
 
         LabelDTO result = labelService.findById(EXISTING_LABEL_1.getId()).get();
 
-        assertThat(result.toString()).isEqualTo(new LabelDTO(EXISTING_LABEL_1.getId(), EXISTING_LABEL_1.getName()).toString());
+        assertThat(result.toString()).isEqualTo(new LabelDTO(EXISTING_LABEL_1.getId(),
+                EXISTING_LABEL_1.getName()).toString());
         verify(labelDAO).findById(EXISTING_LABEL_1.getId());
         verify(labelMapper).map(EXISTING_LABEL_1);
     }
@@ -103,11 +110,13 @@ public class LabelServiceTests {
 
         when(labelDAO.findById(EXISTING_LABEL_1.getId())).thenReturn(Optional.of(EXISTING_LABEL_1));
         when(labelDAO.update(EXISTING_LABEL_1)).thenReturn(label);
-        when(labelMapper.map(EXISTING_LABEL_1)).thenReturn(new LabelDTO(EXISTING_LABEL_1.getId(), EXISTING_LABEL_1.getName()));
+        when(labelMapper.map(EXISTING_LABEL_1)).thenReturn(new LabelDTO(EXISTING_LABEL_1.getId(),
+                EXISTING_LABEL_1.getName()));
 
         LabelDTO result = labelService.update(labelCreateUpdateDTO, EXISTING_LABEL_1.getId());
 
-        assertThat(result.toString()).isEqualTo(new LabelDTO(EXISTING_LABEL_1.getId(), "newLabelName").toString());
+        assertThat(result.toString()).isEqualTo(new LabelDTO(EXISTING_LABEL_1.getId(),
+                "newLabelName").toString());
         verify(labelDAO).findById(EXISTING_LABEL_1.getId());
         verify(labelDAO).update(EXISTING_LABEL_1);
         verify(labelMapper).map(EXISTING_LABEL_1);
