@@ -12,7 +12,10 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 public class UserRepository implements Repository<Integer, User> {
 
@@ -65,7 +68,8 @@ public class UserRepository implements Repository<Integer, User> {
 
     @Override
     public User save(User user) {
-        try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
+        try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(SAVE_SQL,
+                Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setObject(1, user.getName());
             preparedStatement.setObject(2, user.getEmail());
             preparedStatement.setObject(3, user.getPassword());

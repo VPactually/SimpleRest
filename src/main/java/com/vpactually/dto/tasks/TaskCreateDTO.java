@@ -1,6 +1,11 @@
 package com.vpactually.dto.tasks;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.ToString;
+
 import org.openapitools.jackson.nullable.JsonNullable;
 
 import java.util.Set;

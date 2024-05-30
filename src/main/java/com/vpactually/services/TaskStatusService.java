@@ -12,7 +12,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TaskStatusService {
 
-    private final TaskStatusRepository taskStatusDAO ;
+    private final TaskStatusRepository taskStatusDAO;
     private final TaskStatusMapper taskStatusMapper;
 
     public List<TaskStatusDTO> findAll() {

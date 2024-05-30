@@ -9,7 +9,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class LabelRepository implements Repository<Integer, Label> {
@@ -47,11 +51,10 @@ public class LabelRepository implements Repository<Integer, Label> {
             while (resultSet.next()) {
                 label = buildLabel(resultSet);
 
-                    label.setTasks(findTasksByLabelId(id).stream()
-                            .map(Task::getId)
-                            .map(Task::new)
-                            .collect(Collectors.toSet()));
-
+                label.setTasks(findTasksByLabelId(id).stream()
+                        .map(Task::getId)
+                        .map(Task::new)
+                        .collect(Collectors.toSet()));
             }
         } catch (SQLException e) {
             e.fillInStackTrace();
@@ -66,7 +69,8 @@ public class LabelRepository implements Repository<Integer, Label> {
 
     @Override
     public Label save(Label label) {
-        try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
+        try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(SAVE_SQL,
+                Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setObject(1, label.getName());
             preparedStatement.setObject(2, LocalDate.now());
             preparedStatement.executeUpdate();
@@ -110,7 +114,8 @@ public class LabelRepository implements Repository<Integer, Label> {
 
     public static Set<Task> findTasksByLabelId(Integer id) {
         Set<Task> tasks = new HashSet<>();
-        try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(FIND_TASKS_BY_LABEL_ID_SQL)) {
+        try (var preparedStatement = ConnectionManager.getInstance()
+                .prepareStatement(FIND_TASKS_BY_LABEL_ID_SQL)) {
             preparedStatement.setObject(1, id);
             var resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {

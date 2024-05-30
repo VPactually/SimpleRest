@@ -34,7 +34,7 @@ public class TaskStatusRepository implements Repository<Integer, TaskStatus> {
     }
 
     @Override
-    public  Optional<TaskStatus> findById(Integer id) {
+    public Optional<TaskStatus> findById(Integer id) {
         TaskStatus taskStatus = null;
         try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(FIND_BY_ID_SQL)) {
             preparedStatement.setObject(1, id);
@@ -50,7 +50,8 @@ public class TaskStatusRepository implements Repository<Integer, TaskStatus> {
 
     @Override
     public TaskStatus save(TaskStatus entity) {
-        try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
+        try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(SAVE_SQL,
+                Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setObject(1, entity.getName());
             preparedStatement.setObject(2, entity.getSlug());
             preparedStatement.setObject(3, LocalDate.now());

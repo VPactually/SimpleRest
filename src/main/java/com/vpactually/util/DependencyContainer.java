@@ -22,7 +22,7 @@ import java.util.Map;
 
 public class DependencyContainer {
 
-    private static final Map<String, Object> beanMap = new HashMap<String, Object>();
+    private static final Map<String, Object> BEAN_MAP = new HashMap<String, Object>();
 
 
     public static void injectDependencies(ServletContext context) {
@@ -44,10 +44,10 @@ public class DependencyContainer {
         var taskStatusService = new TaskStatusService(taskStatusDAO, taskStatusMapper);
         var labelService = new LabelService(labelDAO, labelMapper);
 
-        beanMap.put("userService", userService);
-        beanMap.put("taskService", taskService);
-        beanMap.put("taskStatusService", taskStatusService);
-        beanMap.put("labelService", labelService);
+        BEAN_MAP.put("userService", userService);
+        BEAN_MAP.put("taskService", taskService);
+        BEAN_MAP.put("taskStatusService", taskStatusService);
+        BEAN_MAP.put("labelService", labelService);
 
         context.setAttribute("objectMapper", om);
         context.setAttribute("userService", userService);
@@ -57,11 +57,11 @@ public class DependencyContainer {
     }
 
     public static Object getDependency(String string) {
-        return beanMap.get(string);
+        return BEAN_MAP.get(string);
     }
 
     public static void registerDependency(String string, Object object) {
-        beanMap.put(string, object);
+        BEAN_MAP.put(string, object);
     }
 
 }

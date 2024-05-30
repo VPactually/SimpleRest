@@ -8,7 +8,13 @@ import com.vpactually.entities.Label;
 import com.vpactually.entities.Task;
 import com.vpactually.entities.TaskStatus;
 import com.vpactually.entities.User;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 import org.openapitools.jackson.nullable.JsonNullable;
 
 import java.util.HashSet;
@@ -41,7 +47,7 @@ public abstract class TaskMapper {
 
     @Named("taskStatusIdToTaskStatus")
     public TaskStatus taskStatusIdToTaskStatus(Integer id) {
-        return id  == null ? null : new TaskStatus(id, new HashSet<>());
+        return id == null ? null : new TaskStatus(id, new HashSet<>());
     }
 
     @Named("assigneeIdToUser")
@@ -62,12 +68,12 @@ public abstract class TaskMapper {
 
     public Set<Label> updateLabels(JsonNullable<Set<Integer>> taskLabelIds, Set<Label> labels) {
         var setOfTaskLabelIds = JsonNullableMapper.unwrap(taskLabelIds);
-        if (setOfTaskLabelIds == null || setOfTaskLabelIds.isEmpty() )  {
+        if (setOfTaskLabelIds == null || setOfTaskLabelIds.isEmpty()) {
             return labels;
         } else {
             labels = new HashSet<>();
         }
-        for (var id :  setOfTaskLabelIds) {
+        for (var id : setOfTaskLabelIds) {
             labels.add(new Label(id));
         }
         return labels;

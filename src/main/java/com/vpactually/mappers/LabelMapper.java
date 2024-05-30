@@ -3,7 +3,11 @@ package com.vpactually.mappers;
 import com.vpactually.dto.labels.LabelCreateUpdateDTO;
 import com.vpactually.dto.labels.LabelDTO;
 import com.vpactually.entities.Label;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 
@@ -15,7 +19,8 @@ import java.util.List;
 )
 public abstract class LabelMapper {
 
-    public LabelMapper() {}
+    public LabelMapper() {
+    }
 
     public abstract Label map(LabelCreateUpdateDTO dto);
 

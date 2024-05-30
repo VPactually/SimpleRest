@@ -4,7 +4,10 @@ import com.vpactually.repositories.LabelRepository;
 import com.vpactually.repositories.TaskStatusRepository;
 import com.vpactually.repositories.UserRepository;
 import com.vpactually.util.ConnectionManager;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.EqualsAndHashCode;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -36,7 +39,8 @@ public class Task implements BaseEntity {
             WHERE task_id = ?
             """;
 
-    public Task(Integer id, String title, String description, LocalDate createdAt, TaskStatus taskStatus, User assignee, Set<Label> labels) {
+    public Task(Integer id, String title, String description, LocalDate createdAt,
+                TaskStatus taskStatus, User assignee, Set<Label> labels) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -87,7 +91,8 @@ public class Task implements BaseEntity {
         if (taskStatus == null) {
             taskStatus = new TaskStatus();
         }
-        try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(FIND_TASK_STATUS_BY_TASK_ID_SQL)) {
+        try (var preparedStatement = ConnectionManager.getInstance()
+                .prepareStatement(FIND_TASK_STATUS_BY_TASK_ID_SQL)) {
             preparedStatement.setObject(1, id);
             var resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -102,13 +107,13 @@ public class Task implements BaseEntity {
     @Override
     public String toString() {
         return "Task{" +
-               "id=" + id +
-               ", title='" + title + '\'' +
-               ", description='" + description + '\'' +
-               ", createdAt=" + createdAt +
-               ", taskStatus=" + taskStatus +
-               ", assignee=" + assignee +
-               ", labels=" + labels +
-               '}';
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", createdAt=" + createdAt +
+                ", taskStatus=" + taskStatus +
+                ", assignee=" + assignee +
+                ", labels=" + labels +
+                '}';
     }
 }

@@ -11,7 +11,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.vpactually.repositories.TaskStatusRepository.buildTaskStatus;
@@ -73,12 +77,13 @@ public class TaskRepository implements Repository<Integer, Task> {
             while (resultSet.next()) {
                 var task = buildTask(resultSet);
 
-                    task.setTaskStatus(new TaskStatus(resultSet.getInt(7), resultSet.getString(9)));
-                    task.setAssignee(new User(resultSet.getInt(5)));
-                    task.setLabels(findLabelsByTaskId(task.getId()).stream()
-                            .map(Label::getId)
-                            .map(Label::new)
-                            .collect(Collectors.toSet()));
+                task.setTaskStatus(new TaskStatus(resultSet.getInt(7),
+                        resultSet.getString(9)));
+                task.setAssignee(new User(resultSet.getInt(5)));
+                task.setLabels(findLabelsByTaskId(task.getId()).stream()
+                        .map(Label::getId)
+                        .map(Label::new)
+                        .collect(Collectors.toSet()));
 
                 tasks.add(task);
             }
@@ -101,7 +106,8 @@ public class TaskRepository implements Repository<Integer, Task> {
             if (resultSet.next()) {
                 task = buildTask(resultSet);
 
-                task.setTaskStatus(new TaskStatus(resultSet.getInt(7), resultSet.getString(9)));
+                task.setTaskStatus(new TaskStatus(resultSet.getInt(7),
+                        resultSet.getString(9)));
                 task.setAssignee(new User(resultSet.getInt(5)));
                 task.setLabels(findLabelsByTaskId(id).stream()
                         .map(Label::getId)

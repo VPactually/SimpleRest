@@ -3,7 +3,12 @@ package com.vpactually.mappers;
 import com.vpactually.dto.taskStatuses.TaskStatusCreateUpdateDTO;
 import com.vpactually.dto.taskStatuses.TaskStatusDTO;
 import com.vpactually.entities.TaskStatus;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
+
 
 @Mapper(
         uses = {JsonNullableMapper.class},
@@ -13,7 +18,8 @@ import org.mapstruct.*;
 )
 public abstract class TaskStatusMapper {
 
-    public TaskStatusMapper() {}
+    public TaskStatusMapper() {
+    }
 
     public abstract TaskStatus map(TaskStatusCreateUpdateDTO dto);
 

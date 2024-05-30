@@ -3,6 +3,7 @@ plugins {
     id 'war'
     id 'jacoco'
     id 'application'
+    id 'checkstyle'
 }
 
 group 'com.vpactually'

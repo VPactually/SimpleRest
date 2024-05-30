@@ -1,6 +1,10 @@
 package com.vpactually.dto.tasks;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.ToString;
 import org.openapitools.jackson.nullable.JsonNullable;
 
 import java.util.Set;
@@ -17,7 +21,7 @@ public class TaskUpdateDTO {
     private JsonNullable<Integer> assigneeId;
     private JsonNullable<Set<Integer>> taskLabelIds;
 
-    public TaskUpdateDTO(TaskCreateDTO taskCreateDTO){
+    public TaskUpdateDTO(TaskCreateDTO taskCreateDTO) {
         this.title = taskCreateDTO.getTitle();
         this.description = taskCreateDTO.getDescription();
         this.statusId = taskCreateDTO.getStatusId();

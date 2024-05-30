@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
-public class User implements BaseEntity{
+public class User implements BaseEntity {
     private Integer id;
     private String name;
     private String email;

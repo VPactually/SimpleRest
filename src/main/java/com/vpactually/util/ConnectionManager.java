@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class ConnectionManager {
 
-    private static Connection INSTANCE;
+    private static Connection instance;
 
     static {
         try {
@@ -18,21 +18,21 @@ public class ConnectionManager {
 
     public static Connection getInstance() {
         try {
-            if (INSTANCE == null) {
-                INSTANCE = DriverManager.getConnection(
+            if (instance == null) {
+                instance = DriverManager.getConnection(
                         "jdbc:postgresql://localhost:5432/aston_assignments",
                         "postgres",
                         "postgres");
             }
-            return INSTANCE;
+            return instance;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static Connection setConnection(Connection connection) {
-        INSTANCE = connection;
-        return INSTANCE;
+        instance = connection;
+        return instance;
     }
 
 }

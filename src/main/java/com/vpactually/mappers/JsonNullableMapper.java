@@ -10,16 +10,16 @@ import org.openapitools.jackson.nullable.JsonNullable;
 )
 public abstract class JsonNullableMapper {
 
-    public static  <T> JsonNullable<T> wrap(T entity) {
+    public static <T> JsonNullable<T> wrap(T entity) {
         return JsonNullable.of(entity);
     }
 
-    public static  <T> T unwrap(JsonNullable<T> jsonNullable) {
-        return jsonNullable == null ? null : jsonNullable.orElse( (T) new Object());
+    public static <T> T unwrap(JsonNullable<T> jsonNullable) {
+        return jsonNullable == null ? null : jsonNullable.orElse((T) new Object());
     }
 
     @Condition
-    public static  <T> boolean isPresent(JsonNullable<T> nullable) {
+    public static <T> boolean isPresent(JsonNullable<T> nullable) {
         return nullable != null && nullable.isPresent() && nullable.get() != null;
     }
 }

@@ -34,7 +34,7 @@ public class Label implements BaseEntity {
         this.tasks = tasks;
     }
 
-    public Label fetchTasks(){
+    public Label fetchTasks() {
         tasks = fetchTasksBase(FIND_TASKS_BY_LABEL_ID_SQL, tasks, id);
         return this;
     }

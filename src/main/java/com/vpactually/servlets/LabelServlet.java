@@ -74,7 +74,7 @@ public class LabelServlet extends HttpServlet {
     }
 
     @Generated
-    private LabelCreateUpdateDTO createLabel (HttpServletRequest req) {
+    private LabelCreateUpdateDTO createLabel(HttpServletRequest req) {
         var createUpdateDTO = new LabelCreateUpdateDTO();
         createUpdateDTO.setName(JsonNullable.of(req.getParameter("name")));
         return createUpdateDTO;
