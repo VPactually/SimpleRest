@@ -1,14 +1,10 @@
 package com.vpactually.entities;
 
-import com.vpactually.dao.TaskDAO;
-import com.vpactually.util.ConnectionManager;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -19,7 +15,7 @@ public class TaskStatus implements BaseEntity {
     private String name;
     private String slug;
     private LocalDate createdAt;
-    private Set<Task> tasks = new HashSet<>();
+    private Set<Task> tasks;
     private static final String FIND_TASKS_BY_STATUS_ID_SQL = "SELECT * FROM tasks WHERE status_id = ?";
 
     public TaskStatus(Integer id, String name, String slug, LocalDate createdAt) {
@@ -34,23 +30,18 @@ public class TaskStatus implements BaseEntity {
         this.tasks = tasks;
     }
 
-    public void fetchTasks() {
-        try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(FIND_TASKS_BY_STATUS_ID_SQL)) {
-            preparedStatement.setObject(1, id);
-            var resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                var task = TaskDAO.buildTask(resultSet);
-                tasks.add(task);
-            }
-        } catch (SQLException e) {
-            e.fillInStackTrace();
-        }
+    public TaskStatus(Integer id, String slug) {
+        this.slug = slug;
+        this.id = id;
     }
 
-    public Set<Task> getTasks() {
-        if (tasks.isEmpty()) {
-            fetchTasks();
-        }
-        return tasks;
+    public TaskStatus(Integer id) {
+        this.id = id;
     }
+
+    public TaskStatus fetchTasks() {
+        tasks = fetchTasksBase(FIND_TASKS_BY_STATUS_ID_SQL, tasks, id);
+        return this;
+    }
+
 }

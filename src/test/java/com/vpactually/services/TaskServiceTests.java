@@ -1,7 +1,7 @@
 package com.vpactually.services;
 
 import com.vpactually.dao.TaskDAO;
-import com.vpactually.dto.tasks.TaskCreateUpdateDTO;
+import com.vpactually.dto.tasks.TaskCreateDTO;
 import com.vpactually.dto.tasks.TaskDTO;
 import com.vpactually.entities.Label;
 import com.vpactually.mappers.TaskMapper;
@@ -86,7 +86,7 @@ public class TaskServiceTests {
 
     @Test
     public void testSave() {
-        var taskCreateUpdateDTO = new TaskCreateUpdateDTO(JsonNullable.of(ANOTHER_TASK.getTitle()),
+        var taskCreateUpdateDTO = new TaskCreateDTO(JsonNullable.of(ANOTHER_TASK.getTitle()),
                 JsonNullable.of(ANOTHER_TASK.getDescription()), JsonNullable.of(ANOTHER_TASK.getTaskStatus().getId()),
                 JsonNullable.of(ANOTHER_TASK.getAssignee().getId()),
                 JsonNullable.of(ANOTHER_TASK.getLabels().stream().map(Label::getId).collect(Collectors.toSet())));
@@ -113,7 +113,7 @@ public class TaskServiceTests {
 
     @Test
     public void testUpdate() {
-        var taskCreateUpdateDTO = new TaskCreateUpdateDTO(JsonNullable.of("new title"), null, null, null, null);
+        var taskCreateUpdateDTO = new TaskCreateDTO(JsonNullable.of("new title"), null, null, null, null);
         var task = EXISTING_TASK;
         var updatedTask = new TaskDTO(task.getId(), task.getTitle(), task.getDescription(),
                 task.getTaskStatus().getName(), task.getAssignee().getId(), task.getCreatedAt().toString(),

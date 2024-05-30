@@ -1,13 +1,15 @@
 package com.vpactually.mappers;
 
 
-import com.vpactually.dto.tasks.TaskCreateUpdateDTO;
+import com.vpactually.dto.tasks.TaskCreateDTO;
 import com.vpactually.dto.tasks.TaskDTO;
+import com.vpactually.dto.tasks.TaskUpdateDTO;
 import com.vpactually.entities.Label;
 import com.vpactually.entities.Task;
 import com.vpactually.entities.TaskStatus;
 import com.vpactually.entities.User;
 import org.mapstruct.*;
+import org.openapitools.jackson.nullable.JsonNullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,7 +26,7 @@ public abstract class TaskMapper {
     @Mapping(source = "assigneeId", target = "assignee", qualifiedByName = "assigneeIdToUser")
     @Mapping(source = "taskLabelIds", target = "labels", qualifiedByName = "labelIdsToLabels")
     @Mapping(source = "statusId", target = "taskStatus", qualifiedByName = "taskStatusIdToTaskStatus")
-    public abstract Task map(TaskCreateUpdateDTO dto);
+    public abstract Task map(TaskCreateDTO dto);
 
     @Mapping(target = "assigneeId", source = "assignee.id")
     @Mapping(target = "status", source = "taskStatus.slug")
@@ -32,10 +34,10 @@ public abstract class TaskMapper {
     public abstract TaskDTO map(Task model);
 
 
-    @Mapping(source = "statusId", target = "taskStatus", qualifiedByName = "taskStatusIdToTaskStatus")
+    @Mapping(source = "statusId", target = "taskStatus.id")
     @Mapping(source = "assigneeId", target = "assignee.id")
-    @Mapping(source = "taskLabelIds", target = "labels", qualifiedByName = "labelIdsToLabels")
-    public abstract void update(TaskCreateUpdateDTO dto, @MappingTarget Task model);
+    @Mapping(target = "labels", expression = "java(updateLabels(dto.getTaskLabelIds(), model.getLabels()))")
+    public abstract void update(TaskUpdateDTO dto, @MappingTarget Task model);
 
     @Named("taskStatusIdToTaskStatus")
     public TaskStatus taskStatusIdToTaskStatus(Integer id) {
@@ -56,4 +58,19 @@ public abstract class TaskMapper {
     public Set<Integer> labelsToLabelsIds(Set<Label> labels) {
         return labels == null ? null : labels.stream().map(Label::getId).collect(Collectors.toSet());
     }
+
+
+    public Set<Label> updateLabels(JsonNullable<Set<Integer>> taskLabelIds, Set<Label> labels) {
+        var setOfTaskLabelIds = JsonNullableMapper.unwrap(taskLabelIds);
+        if (setOfTaskLabelIds == null || setOfTaskLabelIds.isEmpty() )  {
+            return labels;
+        } else {
+            labels = new HashSet<>();
+        }
+        for (var id :  setOfTaskLabelIds) {
+            labels.add(new Label(id));
+        }
+        return labels;
+    }
+
 }

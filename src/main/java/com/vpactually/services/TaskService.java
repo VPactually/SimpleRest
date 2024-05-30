@@ -1,9 +1,11 @@
 package com.vpactually.services;
 
 import com.vpactually.dao.TaskDAO;
-import com.vpactually.dto.tasks.TaskCreateUpdateDTO;
+import com.vpactually.dto.tasks.TaskCreateDTO;
 import com.vpactually.dto.tasks.TaskDTO;
+import com.vpactually.dto.tasks.TaskUpdateDTO;
 import com.vpactually.mappers.TaskMapper;
+import com.vpactually.util.FetchType;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -20,19 +22,19 @@ public class TaskService {
     }
 
     public Optional<TaskDTO> findById(Integer id) {
-        var task = TASK_DAO.findById(id).orElseThrow();
+        var task = TASK_DAO.findById(id, FetchType.LAZY).orElseThrow();
         var mappedTask = mapper.map(task);
         return Optional.of(mappedTask);
     }
 
-    public TaskDTO save(TaskCreateUpdateDTO taskCreateDTO) {
+    public TaskDTO save(TaskCreateDTO taskCreateDTO) {
         var task = mapper.map(taskCreateDTO);
         TASK_DAO.save(task);
         return mapper.map(task);
     }
 
-    public TaskDTO update(TaskCreateUpdateDTO taskUpdateDTO, Integer id) {
-        var task = TASK_DAO.findById(id).orElseThrow();
+    public TaskDTO update(TaskUpdateDTO taskUpdateDTO, Integer id) {
+        var task = TASK_DAO.findById(id, FetchType.EAGER).orElseThrow();
         mapper.update(taskUpdateDTO, task);
         TASK_DAO.update(task);
         return mapper.map(task);

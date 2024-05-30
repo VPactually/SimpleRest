@@ -10,7 +10,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class TaskCreateUpdateDTO {
+public class TaskCreateDTO {
     private JsonNullable<String> title;
     private JsonNullable<String> description;
     private JsonNullable<Integer> statusId;

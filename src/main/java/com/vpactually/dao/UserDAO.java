@@ -3,6 +3,7 @@ package com.vpactually.dao;
 import com.vpactually.entities.Task;
 import com.vpactually.entities.User;
 import com.vpactually.util.ConnectionManager;
+import com.vpactually.util.FetchType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,10 +11,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class UserDAO implements DAO<Integer, User> {
 
@@ -45,20 +43,24 @@ public class UserDAO implements DAO<Integer, User> {
         return users;
     }
 
-    @Override
-    public Optional<User> findById(Integer id) {
+    public Optional<User> findById(Integer id, FetchType fetchType) {
         User user = null;
         try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(FIND_BY_ID_SQL)) {
             preparedStatement.setObject(1, id);
             var resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 user = buildUser(resultSet);
-                user.fetchTasks();
+//                user.fetchTasks();
             }
         } catch (SQLException e) {
             e.fillInStackTrace();
         }
         return Optional.ofNullable(user);
+    }
+
+    @Override
+    public Optional<User> findById(Integer id) {
+        return findById(id, FetchType.LAZY);
     }
 
     @Override
@@ -134,6 +136,9 @@ public class UserDAO implements DAO<Integer, User> {
     }
 
     public void saveUserTasks(Set<Task> tasks, Integer userId) {
+        if (tasks == null) {
+            return;
+        }
         try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(DELETE_USER_TASKS_SQL)) {
             preparedStatement.setObject(1, userId);
             preparedStatement.executeUpdate();

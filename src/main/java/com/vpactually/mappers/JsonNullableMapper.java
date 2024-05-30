@@ -15,7 +15,7 @@ public abstract class JsonNullableMapper {
     }
 
     public static  <T> T unwrap(JsonNullable<T> jsonNullable) {
-        return jsonNullable == null ? null : jsonNullable.orElse(null);
+        return jsonNullable == null ? null : jsonNullable.orElse( (T) new Object());
     }
 
     @Condition

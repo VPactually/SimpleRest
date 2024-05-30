@@ -22,7 +22,7 @@ public class Task implements BaseEntity {
     private LocalDate createdAt;
     private TaskStatus taskStatus;
     private User assignee;
-    private Set<Label> labels = new HashSet<>();
+    private Set<Label> labels;
 
     private static final String FIND_LABELS_BY_TASK_ID_SQL = """
             SELECT * FROM task_labels INNER JOIN labels l ON l.id = task_labels.label_id WHERE task_id = ?
@@ -46,7 +46,14 @@ public class Task implements BaseEntity {
         this.labels = labels;
     }
 
+    public Task(Integer id) {
+        this.id = id;
+    }
+
     public Task fetchLabels() {
+        if (labels == null) {
+            labels = new HashSet<>();
+        }
         try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(FIND_LABELS_BY_TASK_ID_SQL)) {
             preparedStatement.setObject(1, id);
             var resultSet = preparedStatement.executeQuery();
@@ -60,7 +67,10 @@ public class Task implements BaseEntity {
         return this;
     }
 
-    public void fetchAssignee() {
+    public Task fetchAssignee() {
+        if (assignee == null) {
+            assignee = new User();
+        }
         try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(FIND_USER_BY_TASK_ID_SQL)) {
             preparedStatement.setObject(1, id);
             var resultSet = preparedStatement.executeQuery();
@@ -70,9 +80,13 @@ public class Task implements BaseEntity {
         } catch (SQLException e) {
             e.fillInStackTrace();
         }
+        return this;
     }
 
-    public void fetchTaskStatus() {
+    public Task fetchTaskStatus() {
+        if (taskStatus == null) {
+            taskStatus = new TaskStatus();
+        }
         try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(FIND_TASK_STATUS_BY_TASK_ID_SQL)) {
             preparedStatement.setObject(1, id);
             var resultSet = preparedStatement.executeQuery();
@@ -82,44 +96,19 @@ public class Task implements BaseEntity {
         } catch (SQLException e) {
             e.fillInStackTrace();
         }
+        return this;
     }
-
-    public Set<Label> getLabels() {
-        if (labels.isEmpty()) {
-            fetchLabels();
-        }
-        return labels;
-    }
-
-    public User getAssignee() {
-        if (assignee == null) {
-            assignee = new User();
-        } else  {
-            fetchAssignee();
-        }
-        return assignee;
-    }
-
-    public TaskStatus getTaskStatus() {
-        if (taskStatus == null) {
-            taskStatus = new TaskStatus();
-        } else  {
-            fetchTaskStatus();
-        }
-        return taskStatus;
-    }
-
 
     @Override
     public String toString() {
         return "Task{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", createdAt=" + createdAt +
-                ", taskStatus=" + taskStatus +
-                ", assignee=" + assignee +
-                ", labels=" + labels +
-                '}';
+               "id=" + id +
+               ", title='" + title + '\'' +
+               ", description='" + description + '\'' +
+               ", createdAt=" + createdAt +
+               ", taskStatus=" + taskStatus +
+               ", assignee=" + assignee +
+               ", labels=" + labels +
+               '}';
     }
 }

@@ -3,12 +3,14 @@ package com.vpactually.dao;
 import com.vpactually.entities.Label;
 import com.vpactually.entities.Task;
 import com.vpactually.util.ConnectionManager;
+import com.vpactually.util.FetchType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class LabelDAO implements DAO<Integer, Label> {
 
@@ -37,19 +39,31 @@ public class LabelDAO implements DAO<Integer, Label> {
         return labels;
     }
 
-    @Override
-    public Optional<Label> findById(Integer id) {
+    public Optional<Label> findById(Integer id, FetchType fetchType) {
         Label label = null;
         try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(FIND_BY_ID_SQL)) {
             preparedStatement.setObject(1, id);
             var resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 label = buildLabel(resultSet);
+                if (fetchType == FetchType.EAGER) {
+                    label.setTasks(findTasksByLabelId(id));
+                } else {
+                    label.setTasks(findTasksByLabelId(id).stream()
+                            .map(Task::getId)
+                            .map(Task::new)
+                            .collect(Collectors.toSet()));
+                }
             }
         } catch (SQLException e) {
             e.fillInStackTrace();
         }
         return Optional.ofNullable(label);
+    }
+
+    @Override
+    public Optional<Label> findById(Integer id) {
+        return findById(id, FetchType.LAZY);
     }
 
     @Override

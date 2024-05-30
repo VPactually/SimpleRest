@@ -48,8 +48,6 @@ public class TaskStatusDAO implements DAO<Integer, TaskStatus> {
         return Optional.ofNullable(taskStatus);
     }
 
-
-
     @Override
     public TaskStatus save(TaskStatus entity) {
         try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {

@@ -1,7 +1,8 @@
 package com.vpactually.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vpactually.dto.tasks.TaskCreateUpdateDTO;
+import com.vpactually.dto.tasks.TaskCreateDTO;
+import com.vpactually.dto.tasks.TaskUpdateDTO;
 import com.vpactually.services.TaskService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -40,10 +41,25 @@ public class TaskServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        var createUpdateDTO = createTask(req);
-        var task = taskService.save(createUpdateDTO);
-        resp.getWriter().write(om.writeValueAsString(task));
 
+        if (req.getRequestURI().equals("/tasks")) {
+            var createUpdateDTO = createTask(req);
+            var task = taskService.save(createUpdateDTO);
+            resp.getWriter().write(om.writeValueAsString(task));
+        } else {
+            doPut(req, resp);
+        }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        var pathVariable = req.getRequestURI().split("/");
+        if (pathVariable.length == 3) {
+            var id = Integer.parseInt(pathVariable[2]);
+            var updateDTO = new TaskUpdateDTO(createTask(req));
+            var task = taskService.update(updateDTO, id);
+            resp.getWriter().write(om.writeValueAsString(task));
+        }
     }
 
     @Override
@@ -55,8 +71,8 @@ public class TaskServlet extends HttpServlet {
         }
     }
 
-    private TaskCreateUpdateDTO createTask(HttpServletRequest req) {
-        var taskCreateUpdateDTO = new TaskCreateUpdateDTO();
+    private TaskCreateDTO createTask(HttpServletRequest req) {
+        var taskCreateUpdateDTO = new TaskCreateDTO();
 
         var title = req.getParameter("title");
         taskCreateUpdateDTO.setTitle(JsonNullable.of(title));
@@ -71,7 +87,7 @@ public class TaskServlet extends HttpServlet {
         taskCreateUpdateDTO.setAssigneeId(JsonNullable.of(assigneeId == null ? null : Integer.parseInt(assigneeId)));
 
         var labels = req.getParameterValues("taskLabelIds");
-        taskCreateUpdateDTO.setTaskLabelIds(labels == null ? null :
+                taskCreateUpdateDTO.setTaskLabelIds(labels == null ? null :
                 JsonNullable.of(Arrays.stream(labels).map(Integer::parseInt).collect(Collectors.toSet())));
 
         return taskCreateUpdateDTO;
