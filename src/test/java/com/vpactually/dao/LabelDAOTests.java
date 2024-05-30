@@ -1,5 +1,6 @@
 package com.vpactually.dao;
 
+import com.vpactually.entities.Task;
 import com.vpactually.util.ContainerUtil;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -9,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.SQLException;
+import java.util.Set;
 
 import static com.vpactually.util.DataUtil.ANOTHER_LABEL;
 import static com.vpactually.util.DataUtil.EXISTING_LABEL_1;
@@ -32,13 +34,18 @@ public class LabelDAOTests {
 
     @Test
     public void testFindAll() {
-        assertThat(LABEL_DAO.findAll()).contains(EXISTING_LABEL_1).doesNotContain(ANOTHER_LABEL);
+        var label = EXISTING_LABEL_1;
+        label.setTasks(null);
+
+        assertThat(LABEL_DAO.findAll()).contains(label).doesNotContain(ANOTHER_LABEL);
 
     }
 
     @Test
     public void testFindById() {
-        assertThat(LABEL_DAO.findById(EXISTING_LABEL_1.getId()).get()).isEqualTo(EXISTING_LABEL_1);
+        var label = EXISTING_LABEL_1;
+        label.setTasks(Set.of(new Task(1)));
+        assertThat(LABEL_DAO.findById(label.getId()).get()).isEqualTo(EXISTING_LABEL_1);
     }
 
 

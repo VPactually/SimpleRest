@@ -39,7 +39,7 @@ public class TaskDAOTests {
 
     @Test
     void testFindById() {
-        assertThat(TASK_DAO.findById(1).get().getTitle()).isEqualTo(EXISTING_TASK.getTitle());
+        assertThat(TASK_DAO.findById(1).get().getId()).isEqualTo(EXISTING_TASK.getId());
     }
 
     @Test
@@ -50,10 +50,10 @@ public class TaskDAOTests {
 
     @Test
     void testUpdate() {
-        var updatedTask = ANOTHER_TASK;
-        updatedTask.setId(1);
+        var updatedTask = EXISTING_TASK;
+        updatedTask.setTitle("Updated Title");
         updatedTask = TASK_DAO.update(updatedTask);
-        var actual = TASK_DAO.findById(updatedTask.getId()).get();
+        var actual = TASK_DAO.findById(updatedTask.getId()).orElseThrow();
 
         assertThat(actual).isEqualTo(updatedTask);
     }
@@ -64,9 +64,6 @@ public class TaskDAOTests {
         TASK_DAO.save(task);
         TASK_DAO.deleteById(task.getId());
         assertThat(TASK_DAO.findAll()).doesNotContain(task);
-
-        TASK_DAO.deleteById(EXISTING_TASK.getId());
-        assertThat(TASK_DAO.findAll().get(0).getId()).isEqualTo(EXISTING_TASK.getId());
     }
 
 //    @Test

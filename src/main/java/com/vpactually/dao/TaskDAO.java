@@ -44,6 +44,7 @@ public class TaskDAO implements DAO<Integer, Task> {
     private static final String DELETE_SQL = """
             DELETE FROM user_tasks WHERE task_id = ?;
             DELETE FROM task_labels WHERE task_id =?;
+            DELETE FROM task_task_statuses WHERE task_id =?;
             DELETE FROM tasks WHERE id =?
             """;
     //language=PostgreSQL
@@ -77,7 +78,7 @@ public class TaskDAO implements DAO<Integer, Task> {
                     task.setTaskStatus(buildTaskStatusByJoinTables(resultSet));
                     task.setAssignee(buildUserByJoinTables(resultSet));
                 } else {
-                    task.setTaskStatus(new TaskStatus(resultSet.getInt(4), resultSet.getString(9)));
+                    task.setTaskStatus(new TaskStatus(resultSet.getInt(7), resultSet.getString(9)));
                     task.setAssignee(new User(resultSet.getInt(5)));
                     task.setLabels(findLabelsByTaskId(task.getId()).stream()
                             .map(Label::getId)
@@ -155,7 +156,6 @@ public class TaskDAO implements DAO<Integer, Task> {
     public Task update(Task task) {
         var labelsForUpdate = task.getLabels();
         var taskStatusForUpdate = task.getTaskStatus();
-        System.out.println("ts4u " + taskStatusForUpdate);
         var labels = labelsForUpdate == null ? task.fetchLabels().getLabels() : labelsForUpdate;
         var taskStatus = taskStatusForUpdate == null ? task.fetchTaskStatus().getTaskStatus() : taskStatusForUpdate;
 
@@ -182,6 +182,7 @@ public class TaskDAO implements DAO<Integer, Task> {
             preparedStatement.setObject(1, id);
             preparedStatement.setObject(2, id);
             preparedStatement.setObject(3, id);
+            preparedStatement.setObject(4, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());

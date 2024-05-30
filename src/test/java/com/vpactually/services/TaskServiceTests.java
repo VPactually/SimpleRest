@@ -3,9 +3,13 @@ package com.vpactually.services;
 import com.vpactually.dao.TaskDAO;
 import com.vpactually.dto.tasks.TaskCreateDTO;
 import com.vpactually.dto.tasks.TaskDTO;
+import com.vpactually.dto.tasks.TaskUpdateDTO;
 import com.vpactually.entities.Label;
+import com.vpactually.entities.TaskStatus;
+import com.vpactually.entities.User;
 import com.vpactually.mappers.TaskMapper;
 import com.vpactually.util.ContainerUtil;
+import com.vpactually.util.FetchType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -69,18 +73,25 @@ public class TaskServiceTests {
     @Test
     public void testFindById() {
         var existingTask = EXISTING_TASK;
+        existingTask.setTaskStatus(new TaskStatus(existingTask.getTaskStatus().getId(),
+                EXISTING_TASK.getTaskStatus().getSlug()));
+        existingTask.setAssignee(new User(existingTask.getAssignee().getId()));
+        existingTask.setLabels(EXISTING_TASK.getLabels().stream()
+                .map(Label::getId)
+                .map(Label::new)
+                .collect(Collectors.toSet()));
         var taskDto = new TaskDTO(EXISTING_TASK.getId(), EXISTING_TASK.getTitle(), EXISTING_TASK.getDescription(),
-                EXISTING_TASK.getTaskStatus().getName(), EXISTING_TASK.getAssignee().getId(),
+                EXISTING_TASK.getTaskStatus().getSlug(), EXISTING_TASK.getAssignee().getId(),
                 EXISTING_TASK.getCreatedAt().toString(),
                 EXISTING_TASK.getLabels().stream().map(Label::getId).collect(Collectors.toSet()));
 
-        when(taskDAO.findById(existingTask.getId())).thenReturn(java.util.Optional.of(existingTask));
+        when(taskDAO.findById(existingTask.getId(), FetchType.LAZY)).thenReturn(Optional.of(existingTask));
         when(taskMapper.map(existingTask)).thenReturn(taskDto);
 
-        var actual = taskService.findById(existingTask.getId());
+        var actual = taskService.findById(existingTask.getId()).get();
 
         assertThat(actual.toString()).isEqualTo(taskDto.toString());
-        verify(taskDAO).findById(existingTask.getId());
+        verify(taskDAO).findById(existingTask.getId(), FetchType.LAZY);
         verify(taskMapper).map(existingTask);
     }
 
@@ -113,21 +124,21 @@ public class TaskServiceTests {
 
     @Test
     public void testUpdate() {
-        var taskCreateUpdateDTO = new TaskCreateDTO(JsonNullable.of("new title"), null, null, null, null);
+        var taskCreateUpdateDTO = new TaskUpdateDTO(JsonNullable.of("new title"), null, null, null, null);
         var task = EXISTING_TASK;
         var updatedTask = new TaskDTO(task.getId(), task.getTitle(), task.getDescription(),
                 task.getTaskStatus().getName(), task.getAssignee().getId(), task.getCreatedAt().toString(),
                 task.getLabels().stream().map(Label::getId).collect(Collectors.toSet()));
 
 
-        when(taskDAO.findById(task.getId())).thenReturn(Optional.of(task));
+        when(taskDAO.findById(task.getId(), FetchType.EAGER)).thenReturn(Optional.of(task));
         when(taskDAO.update(task)).thenReturn(task);
         when(taskMapper.map(task)).thenReturn(updatedTask);
 
         var actual = taskService.update(taskCreateUpdateDTO, task.getId());
 
         assertThat(actual.toString()).isEqualTo(updatedTask.toString());
-        verify(taskDAO).findById(task.getId());
+        verify(taskDAO).findById(task.getId(),FetchType.EAGER);
         verify(taskDAO).update(task);
         verify(taskMapper).map(task);
     }
