@@ -145,10 +145,8 @@ public class TaskDAO implements DAO<Integer, Task> {
 
     @Override
     public Task update(Task task) {
-        var labelsForUpdate = task.getLabels();
-        var taskStatusForUpdate = task.getTaskStatus();
-        var labels = labelsForUpdate == null ? task.fetchLabels().getLabels() : labelsForUpdate;
-        var taskStatus = taskStatusForUpdate == null ? task.fetchTaskStatus().getTaskStatus() : taskStatusForUpdate;
+        var labels = task.getLabels();
+        var taskStatus = task.getTaskStatus();
 
         try (var preparedStatement = ConnectionManager.getInstance().prepareStatement(UPDATE_SQL)) {
             preparedStatement.setObject(1, task.getTitle());

@@ -3,6 +3,7 @@ package com.vpactually.servlets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vpactually.dto.users.UserCreateUpdateDTO;
 import com.vpactually.services.UserService;
+import com.vpactually.util.Generated;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,6 +19,7 @@ public class UserServlet extends HttpServlet {
     private UserService userService;
     private ObjectMapper om;
 
+    @Generated
     @Override
     public void init() throws ServletException {
         super.init();
@@ -70,6 +72,7 @@ public class UserServlet extends HttpServlet {
         }
     }
 
+    @Generated
     private UserCreateUpdateDTO createUser(HttpServletRequest req) {
         var createUpdateDTO = new UserCreateUpdateDTO();
         createUpdateDTO.setEmail(JsonNullable.of(req.getParameter("email")));

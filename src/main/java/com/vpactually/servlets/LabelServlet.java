@@ -3,6 +3,7 @@ package com.vpactually.servlets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vpactually.dto.labels.LabelCreateUpdateDTO;
 import com.vpactually.services.LabelService;
+import com.vpactually.util.Generated;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,6 +20,7 @@ public class LabelServlet extends HttpServlet {
     private LabelService labelService;
     private ObjectMapper om;
 
+    @Generated
     @Override
     public void init() throws ServletException {
         super.init();
@@ -71,6 +73,7 @@ public class LabelServlet extends HttpServlet {
         }
     }
 
+    @Generated
     private LabelCreateUpdateDTO createLabel (HttpServletRequest req) {
         var createUpdateDTO = new LabelCreateUpdateDTO();
         createUpdateDTO.setName(JsonNullable.of(req.getParameter("name")));

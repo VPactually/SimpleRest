@@ -3,6 +3,7 @@ package com.vpactually.servlets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vpactually.dto.taskStatuses.TaskStatusCreateUpdateDTO;
 import com.vpactually.services.TaskStatusService;
+import com.vpactually.util.Generated;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,6 +18,7 @@ public class TaskStatusServlet extends HttpServlet {
     private TaskStatusService taskStatusService;
     private ObjectMapper om;
 
+    @Generated
     @Override
     public void init() throws ServletException {
         super.init();
@@ -68,6 +70,7 @@ public class TaskStatusServlet extends HttpServlet {
         }
     }
 
+    @Generated
     private TaskStatusCreateUpdateDTO createTaskStatus(HttpServletRequest req) {
         var createUpdateDTO = new TaskStatusCreateUpdateDTO();
         createUpdateDTO.setName(JsonNullable.of(req.getParameter("name")));

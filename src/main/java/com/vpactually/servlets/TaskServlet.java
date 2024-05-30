@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vpactually.dto.tasks.TaskCreateDTO;
 import com.vpactually.dto.tasks.TaskUpdateDTO;
 import com.vpactually.services.TaskService;
+import com.vpactually.util.Generated;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -21,6 +22,7 @@ public class TaskServlet extends HttpServlet {
     private TaskService taskService;
     private ObjectMapper om;
 
+    @Generated
     @Override
     public void init() {
         taskService = (TaskService) getServletContext().getAttribute("taskService");
@@ -71,25 +73,18 @@ public class TaskServlet extends HttpServlet {
         }
     }
 
+    @Generated
     private TaskCreateDTO createTask(HttpServletRequest req) {
         var taskCreateUpdateDTO = new TaskCreateDTO();
-
-        var title = req.getParameter("title");
-        taskCreateUpdateDTO.setTitle(JsonNullable.of(title));
-
-        var description = req.getParameter("description");
-        taskCreateUpdateDTO.setDescription(JsonNullable.of(description));
-
+        taskCreateUpdateDTO.setTitle(JsonNullable.of(req.getParameter("title")));
+        taskCreateUpdateDTO.setDescription(JsonNullable.of(req.getParameter("description")));
         var statusId = req.getParameter("statusId");
         taskCreateUpdateDTO.setStatusId(JsonNullable.of(statusId == null ? null : Integer.parseInt(statusId)));
-
         var assigneeId = req.getParameter("assigneeId");
         taskCreateUpdateDTO.setAssigneeId(JsonNullable.of(assigneeId == null ? null : Integer.parseInt(assigneeId)));
-
         var labels = req.getParameterValues("taskLabelIds");
-                taskCreateUpdateDTO.setTaskLabelIds(labels == null ? null :
+        taskCreateUpdateDTO.setTaskLabelIds(labels == null ? null :
                 JsonNullable.of(Arrays.stream(labels).map(Integer::parseInt).collect(Collectors.toSet())));
-
         return taskCreateUpdateDTO;
     }
 }
