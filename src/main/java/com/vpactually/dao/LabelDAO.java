@@ -46,14 +46,12 @@ public class LabelDAO implements DAO<Integer, Label> {
             var resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 label = buildLabel(resultSet);
-                if (fetchType == FetchType.EAGER) {
-                    label.setTasks(findTasksByLabelId(id));
-                } else {
+
                     label.setTasks(findTasksByLabelId(id).stream()
                             .map(Task::getId)
                             .map(Task::new)
                             .collect(Collectors.toSet()));
-                }
+
             }
         } catch (SQLException e) {
             e.fillInStackTrace();

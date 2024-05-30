@@ -131,14 +131,14 @@ public class TaskServiceTests {
                 task.getLabels().stream().map(Label::getId).collect(Collectors.toSet()));
 
 
-        when(taskDAO.findById(task.getId(), FetchType.EAGER)).thenReturn(Optional.of(task));
+        when(taskDAO.findById(task.getId(), FetchType.LAZY)).thenReturn(Optional.of(task));
         when(taskDAO.update(task)).thenReturn(task);
         when(taskMapper.map(task)).thenReturn(updatedTask);
 
         var actual = taskService.update(taskCreateUpdateDTO, task.getId());
 
         assertThat(actual.toString()).isEqualTo(updatedTask.toString());
-        verify(taskDAO).findById(task.getId(),FetchType.EAGER);
+        verify(taskDAO).findById(task.getId(),FetchType.LAZY);
         verify(taskDAO).update(task);
         verify(taskMapper).map(task);
     }

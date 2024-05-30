@@ -25,11 +25,26 @@ jacoco {
 }
 
 jacocoTestReport {
+
+    dependsOn test // tests are required to run before generating the report
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "**/dto/*",
+                    "**/config/*",
+                    "**/mappers/*",
+                    "**/entities/*",
+                    "**/util/*"
+            ])
+        }))
+
+    }
+
     reports {
         xml.required.set(true)
     }
 }
-
 test {
     useJUnitPlatform()
 }

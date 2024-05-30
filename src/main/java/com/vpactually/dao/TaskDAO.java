@@ -15,8 +15,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.vpactually.dao.TaskStatusDAO.buildTaskStatus;
-import static com.vpactually.dao.TaskStatusDAO.buildTaskStatusByJoinTables;
-import static com.vpactually.dao.UserDAO.buildUserByJoinTables;
 
 public class TaskDAO implements DAO<Integer, Task> {
 
@@ -74,17 +72,14 @@ public class TaskDAO implements DAO<Integer, Task> {
             var resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 var task = buildTask(resultSet);
-                if (fetchType == FetchType.EAGER) {
-                    task.setTaskStatus(buildTaskStatusByJoinTables(resultSet));
-                    task.setAssignee(buildUserByJoinTables(resultSet));
-                } else {
+
                     task.setTaskStatus(new TaskStatus(resultSet.getInt(7), resultSet.getString(9)));
                     task.setAssignee(new User(resultSet.getInt(5)));
                     task.setLabels(findLabelsByTaskId(task.getId()).stream()
                             .map(Label::getId)
                             .map(Label::new)
                             .collect(Collectors.toSet()));
-                }
+
                 tasks.add(task);
             }
         } catch (SQLException e) {
@@ -105,18 +100,14 @@ public class TaskDAO implements DAO<Integer, Task> {
             var resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 task = buildTask(resultSet);
-                if (fetchType == FetchType.EAGER) {
-                    task.setTaskStatus(buildTaskStatusByJoinTables(resultSet));
-                    task.setAssignee(buildUserByJoinTables(resultSet));
-                    task.setLabels(task.fetchLabels().getLabels());
-                } else {
-                    task.setTaskStatus(new TaskStatus(resultSet.getInt(7), resultSet.getString(9)));
-                    task.setAssignee(new User(resultSet.getInt(5)));
-                    task.setLabels(findLabelsByTaskId(id).stream()
-                            .map(Label::getId)
-                            .map(Label::new)
-                            .collect(Collectors.toSet()));
-                }
+
+                task.setTaskStatus(new TaskStatus(resultSet.getInt(7), resultSet.getString(9)));
+                task.setAssignee(new User(resultSet.getInt(5)));
+                task.setLabels(findLabelsByTaskId(id).stream()
+                        .map(Label::getId)
+                        .map(Label::new)
+                        .collect(Collectors.toSet()));
+
             }
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());

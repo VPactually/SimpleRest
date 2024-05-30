@@ -34,7 +34,7 @@ public class TaskService {
     }
 
     public TaskDTO update(TaskUpdateDTO taskUpdateDTO, Integer id) {
-        var task = TASK_DAO.findById(id, FetchType.EAGER).orElseThrow();
+        var task = TASK_DAO.findById(id, FetchType.LAZY).orElseThrow();
         mapper.update(taskUpdateDTO, task);
         TASK_DAO.update(task);
         return mapper.map(task);

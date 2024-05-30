@@ -4,6 +4,7 @@ import com.vpactually.entities.Task;
 import com.vpactually.entities.User;
 import com.vpactually.util.ConnectionManager;
 import com.vpactually.util.FetchType;
+import com.vpactually.util.Generated;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -50,7 +51,6 @@ public class UserDAO implements DAO<Integer, User> {
             var resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 user = buildUser(resultSet);
-//                user.fetchTasks();
             }
         } catch (SQLException e) {
             e.fillInStackTrace();
@@ -120,21 +120,7 @@ public class UserDAO implements DAO<Integer, User> {
         return user;
     }
 
-    public static User buildUserByJoinTables(ResultSet resultSet) throws SQLException {
-        var user = new User();
-        var id = resultSet.getInt(11);
-        user.setId(id);
-        var name = resultSet.getString(12);
-        user.setName(name);
-        var email = resultSet.getString(13);
-        user.setEmail(email);
-        var password = resultSet.getString(14);
-        user.setPassword(password);
-        var date = resultSet.getDate(15).toLocalDate();
-        user.setCreatedAt(date);
-        return user;
-    }
-
+    @Generated
     public void saveUserTasks(Set<Task> tasks, Integer userId) {
         if (tasks == null) {
             return;
