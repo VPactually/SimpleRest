@@ -1,6 +1,6 @@
 package com.vpactually.services;
 
-import com.vpactually.dao.UserDAO;
+import com.vpactually.repositories.UserRepository;
 import com.vpactually.dto.users.UserCreateUpdateDTO;
 import com.vpactually.dto.users.UserDTO;
 import com.vpactually.mappers.UserMapper;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.when;
 public class UserServiceTests {
 
     @Mock
-    private UserDAO userDAO;
+    private UserRepository userDAO;
 
     @Mock
     private UserMapper userMapper;

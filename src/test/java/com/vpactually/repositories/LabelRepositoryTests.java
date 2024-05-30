@@ -1,4 +1,4 @@
-package com.vpactually.dao;
+package com.vpactually.repositories;
 
 import com.vpactually.entities.Task;
 import com.vpactually.util.ContainerUtil;
@@ -17,10 +17,10 @@ import static com.vpactually.util.DataUtil.EXISTING_LABEL_1;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-public class LabelDAOTests {
+public class LabelRepositoryTests {
 
     @InjectMocks
-    private static LabelDAO LABEL_DAO;
+    private static LabelRepository LABEL_DAO;
 
     @BeforeAll
     public static void startContainer() throws SQLException {

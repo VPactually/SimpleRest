@@ -1,6 +1,6 @@
 package com.vpactually.services;
 
-import com.vpactually.dao.LabelDAO;
+import com.vpactually.repositories.LabelRepository;
 import com.vpactually.dto.labels.LabelCreateUpdateDTO;
 import com.vpactually.dto.labels.LabelDTO;
 import com.vpactually.mappers.LabelMapper;
@@ -12,7 +12,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LabelService {
 
-    private final LabelDAO LABEL_DAO;
+    private final LabelRepository LABEL_DAO;
     private final LabelMapper LABEL_MAPPER;
 
     public List<LabelDTO> findAll() {

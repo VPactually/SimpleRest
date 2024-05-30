@@ -1,4 +1,4 @@
-package com.vpactually.dao;
+package com.vpactually.repositories;
 
 import com.vpactually.entities.TaskStatus;
 import com.vpactually.util.ContainerUtil;
@@ -15,10 +15,10 @@ import static com.vpactually.util.DataUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-public class TaskStatusDAOTests {
+public class TaskStatusRepositoryTests {
 
     @InjectMocks
-    private static TaskStatusDAO taskStatusDAO;
+    private static TaskStatusRepository taskStatusDAO;
 
     @BeforeAll
     public static void startContainer() throws SQLException {

@@ -1,6 +1,6 @@
 package com.vpactually.services;
 
-import com.vpactually.dao.TaskDAO;
+import com.vpactually.repositories.TaskRepository;
 import com.vpactually.dto.tasks.TaskCreateDTO;
 import com.vpactually.dto.tasks.TaskDTO;
 import com.vpactually.dto.tasks.TaskUpdateDTO;
@@ -14,7 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TaskService {
 
-    private final TaskDAO TASK_DAO;
+    private final TaskRepository TASK_DAO;
     private final TaskMapper mapper;
 
     public List<TaskDTO> findAll() {

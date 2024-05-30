@@ -1,6 +1,6 @@
 package com.vpactually.services;
 
-import com.vpactually.dao.LabelDAO;
+import com.vpactually.repositories.LabelRepository;
 import com.vpactually.dto.labels.LabelCreateUpdateDTO;
 import com.vpactually.dto.labels.LabelDTO;
 import com.vpactually.entities.Label;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.*;
 public class LabelServiceTests {
 
     @Mock
-    private LabelDAO labelDAO;
+    private LabelRepository labelDAO;
 
     @Mock
     private LabelMapper labelMapper;

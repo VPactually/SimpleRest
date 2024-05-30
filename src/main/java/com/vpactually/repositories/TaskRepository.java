@@ -1,4 +1,4 @@
-package com.vpactually.dao;
+package com.vpactually.repositories;
 
 import com.vpactually.entities.Label;
 import com.vpactually.entities.Task;
@@ -14,9 +14,9 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.vpactually.dao.TaskStatusDAO.buildTaskStatus;
+import static com.vpactually.repositories.TaskStatusRepository.buildTaskStatus;
 
-public class TaskDAO implements DAO<Integer, Task> {
+public class TaskRepository implements Repository<Integer, Task> {
 
     //language=PostgreSQL
     private static final String FIND_ALL_SQL = """
@@ -252,7 +252,7 @@ public class TaskDAO implements DAO<Integer, Task> {
             preparedStatement.setObject(1, id);
             var resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                var task = LabelDAO.buildLabel(resultSet);
+                var task = LabelRepository.buildLabel(resultSet);
                 labels.add(task);
             }
         } catch (SQLException e) {

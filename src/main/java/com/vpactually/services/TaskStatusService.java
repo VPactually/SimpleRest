@@ -1,6 +1,6 @@
 package com.vpactually.services;
 
-import com.vpactually.dao.TaskStatusDAO;
+import com.vpactually.repositories.TaskStatusRepository;
 import com.vpactually.dto.taskStatuses.TaskStatusCreateUpdateDTO;
 import com.vpactually.dto.taskStatuses.TaskStatusDTO;
 import com.vpactually.mappers.TaskStatusMapper;
@@ -12,7 +12,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TaskStatusService {
 
-    private final TaskStatusDAO taskStatusDAO ;
+    private final TaskStatusRepository taskStatusDAO ;
     private final TaskStatusMapper taskStatusMapper;
 
     public List<TaskStatusDTO> findAll() {

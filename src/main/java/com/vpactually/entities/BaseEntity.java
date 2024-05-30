@@ -1,6 +1,6 @@
 package com.vpactually.entities;
 
-import com.vpactually.dao.TaskDAO;
+import com.vpactually.repositories.TaskRepository;
 import com.vpactually.util.ConnectionManager;
 
 import java.sql.SQLException;
@@ -18,7 +18,7 @@ public interface BaseEntity {
             preparedStatement.setObject(1, id);
             var resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                var task = TaskDAO.buildTask(resultSet);
+                var task = TaskRepository.buildTask(resultSet);
                 tasks.add(task);
             }
         } catch (SQLException e) {

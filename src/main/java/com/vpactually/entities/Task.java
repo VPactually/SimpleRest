@@ -1,8 +1,8 @@
 package com.vpactually.entities;
 
-import com.vpactually.dao.LabelDAO;
-import com.vpactually.dao.TaskStatusDAO;
-import com.vpactually.dao.UserDAO;
+import com.vpactually.repositories.LabelRepository;
+import com.vpactually.repositories.TaskStatusRepository;
+import com.vpactually.repositories.UserRepository;
 import com.vpactually.util.ConnectionManager;
 import lombok.*;
 
@@ -58,7 +58,7 @@ public class Task implements BaseEntity {
             preparedStatement.setObject(1, id);
             var resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                var task = LabelDAO.buildLabel(resultSet);
+                var task = LabelRepository.buildLabel(resultSet);
                 labels.add(task);
             }
         } catch (SQLException e) {
@@ -75,7 +75,7 @@ public class Task implements BaseEntity {
             preparedStatement.setObject(1, id);
             var resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                assignee = UserDAO.buildUser(resultSet);
+                assignee = UserRepository.buildUser(resultSet);
             }
         } catch (SQLException e) {
             e.fillInStackTrace();
@@ -91,7 +91,7 @@ public class Task implements BaseEntity {
             preparedStatement.setObject(1, id);
             var resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                taskStatus = TaskStatusDAO.buildTaskStatus(resultSet);
+                taskStatus = TaskStatusRepository.buildTaskStatus(resultSet);
             }
         } catch (SQLException e) {
             e.fillInStackTrace();

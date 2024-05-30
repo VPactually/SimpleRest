@@ -1,6 +1,6 @@
 package com.vpactually.services;
 
-import com.vpactually.dao.UserDAO;
+import com.vpactually.repositories.UserRepository;
 import com.vpactually.dto.users.UserCreateUpdateDTO;
 import com.vpactually.dto.users.UserDTO;
 import com.vpactually.mappers.UserMapper;
@@ -12,7 +12,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserDAO userDAO;
+    private final UserRepository userDAO;
     private final UserMapper userMapper;
 
     public List<UserDTO> findAll() {

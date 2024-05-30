@@ -1,4 +1,4 @@
-package com.vpactually.dao;
+package com.vpactually.repositories;
 
 import com.vpactually.util.ContainerUtil;
 import org.junit.jupiter.api.AfterAll;
@@ -16,10 +16,10 @@ import static com.vpactually.util.DataUtil.ANOTHER_USER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-public class UserDAOTests {
+public class UserRepositoryTests {
 
     @InjectMocks
-    private static UserDAO userDAO;
+    private static UserRepository userDAO;
 
 
     @BeforeAll

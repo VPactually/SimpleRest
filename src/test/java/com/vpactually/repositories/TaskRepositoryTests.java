@@ -1,4 +1,4 @@
-package com.vpactually.dao;
+package com.vpactually.repositories;
 
 import com.vpactually.util.ContainerUtil;
 import org.junit.jupiter.api.AfterAll;
@@ -15,10 +15,10 @@ import static com.vpactually.util.DataUtil.EXISTING_TASK;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-public class TaskDAOTests {
+public class TaskRepositoryTests {
 
     @InjectMocks
-    private static TaskDAO TASK_DAO ;
+    private static TaskRepository TASK_DAO ;
 
     @BeforeAll
     public static void startContainer() throws SQLException {

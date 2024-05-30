@@ -1,6 +1,6 @@
 package com.vpactually.services;
 
-import com.vpactually.dao.TaskStatusDAO;
+import com.vpactually.repositories.TaskStatusRepository;
 import com.vpactually.dto.taskStatuses.TaskStatusCreateUpdateDTO;
 import com.vpactually.dto.taskStatuses.TaskStatusDTO;
 import com.vpactually.mappers.TaskStatusMapper;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class TaskStatusServiceTests {
     @Mock
-    private TaskStatusDAO taskStatusDAO;
+    private TaskStatusRepository taskStatusDAO;
 
     @Mock
     private TaskStatusMapper taskStatusMapper;

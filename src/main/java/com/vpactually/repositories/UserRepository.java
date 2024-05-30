@@ -1,4 +1,4 @@
-package com.vpactually.dao;
+package com.vpactually.repositories;
 
 import com.vpactually.entities.Task;
 import com.vpactually.entities.User;
@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class UserDAO implements DAO<Integer, User> {
+public class UserRepository implements Repository<Integer, User> {
 
     private static final String FIND_ALL_SQL = "SELECT * FROM users";
     private static final String FIND_BY_ID_SQL = "SELECT * FROM users WHERE id = ?";

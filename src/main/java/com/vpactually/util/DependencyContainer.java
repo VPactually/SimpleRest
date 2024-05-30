@@ -2,10 +2,10 @@ package com.vpactually.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.vpactually.dao.LabelDAO;
-import com.vpactually.dao.TaskDAO;
-import com.vpactually.dao.TaskStatusDAO;
-import com.vpactually.dao.UserDAO;
+import com.vpactually.repositories.LabelRepository;
+import com.vpactually.repositories.TaskRepository;
+import com.vpactually.repositories.TaskStatusRepository;
+import com.vpactually.repositories.UserRepository;
 import com.vpactually.mappers.LabelMapper;
 import com.vpactually.mappers.TaskMapper;
 import com.vpactually.mappers.TaskStatusMapper;
@@ -29,10 +29,10 @@ public class DependencyContainer {
 
         var om = new ObjectMapper();
         om.registerModule(new JavaTimeModule());
-        var userDAO = new UserDAO();
-        var taskDAO = new TaskDAO();
-        var taskStatusDAO = new TaskStatusDAO();
-        var labelDAO = new LabelDAO();
+        var userDAO = new UserRepository();
+        var taskDAO = new TaskRepository();
+        var taskStatusDAO = new TaskStatusRepository();
+        var labelDAO = new LabelRepository();
 
         var userMapper = Mappers.getMapper(UserMapper.class);
         var taskMapper = Mappers.getMapper(TaskMapper.class);

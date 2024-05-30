@@ -1,4 +1,4 @@
-package com.vpactually.dao;
+package com.vpactually.repositories;
 
 import com.vpactually.entities.TaskStatus;
 import com.vpactually.util.ConnectionManager;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class TaskStatusDAO implements DAO<Integer, TaskStatus> {
+public class TaskStatusRepository implements Repository<Integer, TaskStatus> {
     private static final String FIND_ALL_SQL = "SELECT * FROM task_statuses";
     private static final String FIND_BY_ID_SQL = "SELECT * FROM task_statuses WHERE id = ?";
     private static final String SAVE_SQL = "INSERT INTO task_statuses (name, slug, created_at) VALUES (?, ?, ?)";

@@ -1,6 +1,6 @@
 package com.vpactually.services;
 
-import com.vpactually.dao.TaskDAO;
+import com.vpactually.repositories.TaskRepository;
 import com.vpactually.dto.tasks.TaskCreateDTO;
 import com.vpactually.dto.tasks.TaskDTO;
 import com.vpactually.dto.tasks.TaskUpdateDTO;
@@ -34,7 +34,7 @@ import static org.mockito.Mockito.when;
 public class TaskServiceTests {
 
     @Mock
-    private TaskDAO taskDAO;
+    private TaskRepository taskDAO;
 
     @Mock
     private TaskMapper taskMapper;

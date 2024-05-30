@@ -1,9 +1,9 @@
-package com.vpactually.dao;
+package com.vpactually.repositories;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface DAO<K, T> {
+public interface Repository<K, T> {
     List<T> findAll();
 
     Optional<T> findById(K id);

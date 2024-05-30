@@ -1,4 +1,4 @@
-package com.vpactually.dao;
+package com.vpactually.repositories;
 
 import com.vpactually.entities.Label;
 import com.vpactually.entities.Task;
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class LabelDAO implements DAO<Integer, Label> {
+public class LabelRepository implements Repository<Integer, Label> {
 
     private static final String FIND_ALL_SQL = "SELECT * FROM labels";
     private static final String FIND_BY_ID_SQL = "SELECT * FROM labels WHERE id = ?";
@@ -114,7 +114,7 @@ public class LabelDAO implements DAO<Integer, Label> {
             preparedStatement.setObject(1, id);
             var resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                var task = TaskDAO.buildTask(resultSet);
+                var task = TaskRepository.buildTask(resultSet);
                 tasks.add(task);
             }
         } catch (SQLException e) {
